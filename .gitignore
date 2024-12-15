@@ -1,0 +1,23 @@
+# Node modules
+sultan-garage-frontend/sultan-garage-frontend/node_modules/
+sultan-garage-backend/node_modules/
+
+# Environment variables
+sultan-garage-frontend/sultan-garage-frontend/.env
+sultan-garage-backend/.env
+
+# Build folders
+sultan-garage-frontend/sultan-garage-frontend/dist/
+sultan-garage-backend/dist/
+
+# Upload folder
+sultan-garage-backend/uploads/
+# Logs
+*.log
+
+# OS specific files
+.DS_Store
+
+# IDE specific files
+.vscode/
+.idea/

@@ -1,0 +1,97 @@
+import { create } from 'zustand';
+
+export const useProductStore = create((set) => ({
+  products: [],
+  loading: false,
+  error: null,
+
+  setProducts: (products) => set({ products }),
+
+  // Fetch Products from the server
+  fetchProducts: async () => {
+    set({ loading: true, error: null });
+    try {
+      const res = await fetch('/api/products');
+      if (!res.ok) {
+        throw new Error('Failed to fetch products');
+      }
+      const data = await res.json();
+      set({ products: data.data, loading: false });
+    } catch (error) {
+      set({ 
+        error: error.message || 'An error occurred', 
+        loading: false 
+      });
+    }
+  },
+
+  // Create Products
+  createProduct: async (newProduct) => {
+    // Validate required fields
+    if (!newProduct.name || !newProduct.image || !newProduct.price) {
+      return { success: false, message: "Please fill in all fields" };
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("name", newProduct.name);
+      formData.append("price", newProduct.price);
+      formData.append("image", newProduct.image);
+      formData.append("category", newProduct.category);
+
+      const res = await fetch("/api/products", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to create product');
+      }
+
+      const data = await res.json();
+
+      // Update the products state
+      set((state) => ({
+        products: [...state.products, data.data],
+      }));
+
+      return { success: true, message: "Product created successfully" };
+    } catch (error) {
+      return { 
+        success: false, 
+        message: error.message || "An error occurred" 
+      };
+    }
+  },
+
+ 
+  // Delete Product
+  deleteProduct: async (productId) => {
+    try {
+      const res = await fetch(`/api/products/${productId}`, {
+        method: "DELETE",
+      });
+      
+      const data = await res.json();
+  
+      if (res.ok) {  // Check HTTP status instead of custom 'success' flag
+        set((state) => ({
+          products: state.products.filter((product) => product._id !== productId),
+        }));
+        return { 
+          success: true, 
+          message: data.message || "Product deleted successfully" 
+        };
+      } else {
+        console.error("Error deleting product", data.message);
+        return { 
+          success: false, 
+          message: data.message || "Failed to delete product" 
+        };
+      }
+    } catch (error) {
+      console.error("Error deleting product", error);
+      return { success: false, message: "An error occurred" };
+    }
+  },
+}));
