@@ -94,4 +94,48 @@ export const useProductStore = create((set) => ({
       return { success: false, message: "An error occurred" };
     }
   },
+
+  // Update Product
+  updateProduct: async (productId, updatedProduct) => {
+    try {
+      const formData = new FormData();
+      formData.append("name", updatedProduct.name);
+      formData.append("price", updatedProduct.price);
+      formData.append("category", updatedProduct.category);
+      
+      // Only append image if it's a new file
+      if (updatedProduct.image instanceof File) {
+        formData.append("image", updatedProduct.image);
+      }
+  
+      const res = await fetch(`/api/products/${productId}`, {
+        method: "PUT",
+        body: formData,
+      });
+  
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Failed to update product');
+      }
+  
+      const data = await res.json();
+  
+      // Update the products state
+      set((state) => ({
+        products: state.products.map((product) => 
+          product._id === productId ? data.data : product
+        )
+      }));
+  
+      return {
+        success: true,
+        message: data.message || "Product updated successfully"
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message || "An error occurred"
+      };
+    }
+  },
 }));

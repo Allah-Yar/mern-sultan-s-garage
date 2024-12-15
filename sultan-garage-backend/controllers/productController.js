@@ -78,13 +78,45 @@ export const createProduct = [
 }
 ]
 
-export const updateProduct = async (req, res) => {
-    try {
-        res.status(200).json({message: "update product"})
-    } catch (error) {
-        console.log(error)
+export const updateProduct = [
+    upload.single("image"),
+    async (req, res) => {
+      try {
+        const productId = req.params.id;
+        const updateData = {
+          name: req.body.name,
+          price: req.body.price,
+          category: req.body.category
+        };
+  
+        // If a new image is uploaded, update the image path
+        if (req.file) {
+          updateData.image = `/uploads/${req.file.filename}`;
+        }
+  
+        const product = await Product.findByIdAndUpdate(
+          productId, 
+          updateData, 
+          { new: true }
+        );
+  
+        if (!product) {
+          return res.status(404).json({ message: "Product not found" });
+        }
+  
+        res.status(200).json({ 
+          message: "Product updated successfully", 
+          data: product 
+        });
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ 
+          message: "Internal server error", 
+          error: error.message 
+        });
+      }
     }
-}
+  ];
 
 export const deleteProduct = async (req, res) => {
     const productId = req.params.id;
