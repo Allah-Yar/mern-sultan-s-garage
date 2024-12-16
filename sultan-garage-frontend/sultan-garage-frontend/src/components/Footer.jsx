@@ -19,8 +19,9 @@ const Footer = () => {
         <Grid item xs={12} sm={6} md={3}>
           <Typography variant="h4"  gutterBottom>Quick Links</Typography>
           <Link href="/" color="inherit" sx={{ display: 'block' }}>Home</Link>
+          
+          <Link href="/about" color="inherit" sx={{ display: 'block' }}>About</Link>
           <Link href="/services" color="inherit" sx={{ display: 'block' }}>Services</Link>
-          <Link href="about" color="inherit" sx={{ display: 'block' }}>About</Link>
           <Link href="/contact" color="inherit" sx={{ display: 'block' }}>Contact</Link>
         </Grid>
 

@@ -6,6 +6,7 @@ import hero from '../assets/images/hero.jpg';
 import { useState, useEffect } from 'react';
 // import { useHref } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+
 // import AppointmentForm from './AppointmentForm';
 
 
@@ -31,11 +32,20 @@ const HeroSection = () => {
   }, []);
 
   
- 
+  const handleScrollToHome = (path) => {
+    navigate(path);
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+  })
+  };
 
   const handleClick = () => {
     navigate('/contact'); // Navigate to the AppointmentForm page
   };
+
+ 
     
   return (
     <>
@@ -84,7 +94,10 @@ const HeroSection = () => {
           }}
         >
           Expert mechanics, affordable services, and quick turnaround for all your automotive needs.
+          <hr style={{marginTop: '3rem'}}/>
         </Typography>
+        
+        
        {/* WhatsApp Button */}
        {isVisible && (
         <Button
@@ -95,6 +108,7 @@ const HeroSection = () => {
             right: '20px',
             backgroundColor: '#25D366',
             color: '#fff',
+            zIndex: 1000,
             width: 60,
             height: 60,
             borderRadius: '50%',
@@ -105,6 +119,29 @@ const HeroSection = () => {
           onClick={handleClick}
         >
           <WhatsAppIcon sx={{ fontSize: 40 }} />
+        </Button>
+      )}
+
+       {isVisible && (
+        <Button
+          variant="contained"
+          sx={{
+            position: 'fixed',
+            bottom: '100px', // Adjust based on your layout
+            right: '20px',
+            backgroundColor: '#1B77D2',
+            color: '#fff',
+            zIndex: 1000,
+            width: 60,
+            height: 60,
+            borderRadius: '50%',
+            '&:hover': {
+              backgroundColor: 'blue',
+            },
+          }}
+          onClick={() => handleScrollToHome('/')}
+        >
+          Home
         </Button>
       )}
       </Container>

@@ -1,10 +1,15 @@
 import mongoose from "mongoose";
 
 const AdminSchema = new mongoose.Schema({
-    // name: {
-    //     type: String,
-    //     required: true,
-    // },
+    name: { 
+        type: String, 
+        required: false 
+    },
+     // Set required to false
+    username: { 
+        type: String,
+         required: true 
+        },
     email: {
         type: String,
         required: true,
@@ -14,19 +19,17 @@ const AdminSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    // isAdmin: {
-    //     type: Boolean,
-    //     default: false,
-    // },
-    // isActive: {
-    //     type: Boolean,
-    //     default: true,
-    // },
+    
+    role: {
+        type: String,
+        enum: ["user", "admin"],
+        default: "user",
+    },
     createdAt: {
         type: Date,
         default: Date.now,
     },
 });
 
-const Admin = mongoose.model("Admin", AdminSchema);
-export default Admin;
+const User = mongoose.model("User", AdminSchema);
+export default User;

@@ -336,27 +336,7 @@ function ResponsiveAppBar() {
               onClose={() => setAnchorElNav(null)}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
-              {/* <MenuItem onClick={handleCloseNavMenu}onClick={() => handleNavClick('/services')} component={Link} to="/">
-                <Typography sx={{ textAlign: 'center' }}>Home</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}onClick={() => handleNavClick('/services')} component={Link} to="/about">
-                <Typography sx={{ textAlign: 'center' }}>About</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}onClick={() => handleNavClick('/services')} component={Link} to="/services">
-                <Typography sx={{ textAlign: 'center' }}>Services</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu} onClick={() => handleNavClick('/services')}component={Link} to="/create">
-                <Typography sx={{ textAlign: 'center' }}>Create Product</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu} onClick={() => handleNavClick('/services')} component={Link} to="/products">
-                <Typography sx={{ textAlign: 'center' }}>Products</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu} onClick={() => handleNavClick('/services')} component={Link} to="/contact">
-                <Typography sx={{ textAlign: 'center' }}>Contact</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu} onClick={() => handleNavClick('/services')} component={Link} to="/testimonials">
-                <Typography sx={{ textAlign: 'center' }}>Testimonials</Typography>
-              </MenuItem> */}
+             
 
             <MenuItem onClick={() => handleNavClick('/')}>
               <Typography sx={{ textAlign: 'center' }}>Home</Typography>

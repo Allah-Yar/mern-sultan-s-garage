@@ -1,8 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { db } from './config/db.js';
+import session from 'express-session';
+import passport from './config/passportConfig.js';
 import  productRoutes from './routes/productRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+
 import cors from 'cors';
 import path from 'path';
 
@@ -22,10 +25,19 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+}));
 
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.use(productRoutes);
 app.use(authRoutes);
+app.use(productRoutes);
+
 
 
 

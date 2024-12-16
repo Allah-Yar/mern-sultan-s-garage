@@ -12,7 +12,7 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 const AppointmentForm = () => {
   const [formData, setFormData] = useState({
     name: '',
-    contactInfo: '',
+    address: '',
     vehicleType: '',
     serviceType: '',
     preferredDate: '',
@@ -34,13 +34,13 @@ const AppointmentForm = () => {
     const message = `
       *Appointment Details:*\n
       Name: ${formData.name}\n
-      Contact Info: ${formData.contactInfo}\n
+      Address: ${formData.address}\n
       Vehicle Type: ${formData.vehicleType}\n
       Service Type: ${formData.serviceType}\n
       Preferred Date/Time: ${formData.preferredDate}
     `;
     
-    // WhatsApp phone number (replace with your actual number)
+    // WhatsApp phone number 
     const phoneNumber = '+971509954306'; 
   
     // WhatsApp link for mobile
@@ -67,10 +67,6 @@ const AppointmentForm = () => {
       // Try opening the desktop WhatsApp app
       const startTime = Date.now();
       const timeoutDuration = 3000; // 3 seconds
-      
-      
-      
-  
       // Check if the web is opened after 3 seconds
       // If not, open the desktop app link
       // This is to handle the case where the web version is not opened
@@ -90,17 +86,60 @@ const AppointmentForm = () => {
     // Reset form after submission
     setFormData({
       name: '',
-      contactInfo: '',
+      address: '',
       vehicleType: '',
       serviceType: '',
       preferredDate: '',
     });
+  };
+
+  const handleSubmitWithoutForm = (e) => {
+    e.preventDefault();
+
+    // Create a formatted message with the form data
+    const message = 'Hello, I would like to book an appointment.';
+    // WhatsApp phone number 
+    const phoneNumber = '+971509954306'; 
+    // WhatsApp link for mobile
+    const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    // WhatsApp link for desktop WhatsApp app
+    const whatsappAppLink = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+    // WhatsApp Web link for browsers
+    const whatsappWebLink = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+    
+    
+    // Check if the user is on mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+      // If mobile, open the mobile WhatsApp app link
+      window.open(whatsappLink, '_blank');
+    } else if (window.open) {
+      // It will open the web version of the whatsapp web link
+      window.open(whatsappWebLink, '_blank');
+    } else {
+      // Try opening the desktop WhatsApp app
+      const startTime = Date.now();
+      const timeoutDuration = 3000; // 3 seconds
+      // Check if the web is opened after 3 seconds
+      // If not, open the desktop app link
+      // This is to handle the case where the web version is not opened
+      // But listen there is limitation from WhatsApp for desktop app, so, it is better to use the web version
+      setTimeout(() => {
+        if (Date.now() - startTime < timeoutDuration + 500) {
+          // Try to open the desktop app Link
+          window.location.href = whatsappAppLink;
+          
+        }
+      }, timeoutDuration);
+    }
   };
   
   
   
 
   return (
+    <>
     <Box
       sx={{
         maxWidth: {xs: '100%', sm: '80%', md: '60%'},
@@ -127,7 +166,7 @@ const AppointmentForm = () => {
         component="h2"
         sx={{ mb: 3, textAlign: 'center', fontWeight: 'bold', color: '#1a1a2e' }}
       >
-        Book an Appointment
+        Book an Appointment via WhatsApp
       </Typography>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
@@ -143,12 +182,12 @@ const AppointmentForm = () => {
             />
           </Grid>
 
-          {/* Contact Info */}
+          {/* Address */}
           <Grid item xs={12}>
             <TextField
-              label="Contact Info"
-              name="contactInfo"
-              value={formData.contactInfo}
+              label="Your Current Address"
+              name="address"
+              value={formData.address}
               onChange={handleChange}
               fullWidth
               required
@@ -233,7 +272,44 @@ const AppointmentForm = () => {
           </Grid>
         </Grid>
       </form>
+
+      {/* For Direct Contact */}
+      <Grid item xs={12} sx={{ textAlign: 'center' }}>
+      <Typography
+        variant="h5"
+        component="h2"
+        sx={{ mb: 3, mt: 3, textAlign: 'center', fontWeight: 'bold', color: '#1a1a2e' }}
+      > OR
+      <br />
+        Direct Contact via WhatsApp
+      </Typography>
+      <Button
+          type="submit"
+      variant="contained"
+      sx={{
+
+        marginTop: 3, // theme.spacing(3)
+        marginBottom: 2, // theme.spacing(2)
+        backgroundColor: '#25D366', // WhatsApp green color
+        color: '#fff',
+        width: 60, // Set a fixed width for the circular button
+        height: 60, // Set the same height to make it circular
+        borderRadius: '50%', 
+        '&:hover': {
+          backgroundColor: '#128C7E', // Darker green on hover
+        },
+      }}
+      onClick={handleSubmitWithoutForm}
+      
+    >
+      <WhatsAppIcon sx={{ fontSize: 40 }} />
+    </Button>
+    </Grid>
+    
     </Box>
+    <hr style={{marginTop: '3rem'}}/>
+    </>
+    
   );
 };
 
