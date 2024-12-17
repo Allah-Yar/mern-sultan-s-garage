@@ -41,6 +41,7 @@ export const useProductStore = create((set) => ({
 
       const res = await fetch("/api/products", {
         method: "POST",
+        credentials: "include", // Ensures cookies are sent
         body: formData,
       });
 

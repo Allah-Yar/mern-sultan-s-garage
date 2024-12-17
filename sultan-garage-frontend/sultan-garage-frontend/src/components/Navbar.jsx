@@ -245,7 +245,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+// const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
@@ -469,13 +469,15 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={() => handleNavClick('/register')}>
+              <Typography sx={{ textAlign: 'center' }}>Register</Typography>
+            </MenuItem>
+              <MenuItem onClick={() => handleNavClick('/login')}>
+              <Typography sx={{ textAlign: 'center' }}>Login</Typography>
+            </MenuItem>
+              <MenuItem onClick={() => handleNavClick('/dashboard')}>
+              <Typography sx={{ textAlign: 'center' }}>Dashboard</Typography>
+            </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

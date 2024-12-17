@@ -19,6 +19,7 @@ db();
 app.use(cors({
     origin: 'http://localhost:5173', // Allow only the frontend app to make requests
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific methods (optional)
+    credentials: true,
   }));
 // Serve the uploads folder statically
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
@@ -29,6 +30,10 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: { 
+        secure: process.env.NODE_ENV === 'production', 
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      }
 }));
 
 // Passport Middleware

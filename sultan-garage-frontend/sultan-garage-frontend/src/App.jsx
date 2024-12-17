@@ -72,6 +72,9 @@ import AppointmentForm from './components/AppointmentForm'
 import Testimonials from './components/Testimonials'
 import Product from './pages/Product'
 import Footer from './components/Footer'
+import Register from './components/Auth/Register';
+import Login from './components/Auth/Login';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
@@ -87,6 +90,10 @@ function App() {
             <Route path="contact" element={<AppointmentForm />} />
             <Route path="testimonials" element={<Testimonials />} />
             <Route path="create" element={<Product />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="*" element={<h1>404 - Page Not Found</h1>} />
           </Route>
         </Routes>
         <Footer />

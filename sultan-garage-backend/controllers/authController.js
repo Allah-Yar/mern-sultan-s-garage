@@ -39,13 +39,33 @@ export const registerUser = async (req, res) => {
 
 // Login User
 export const loginUser = (req, res, next) => {
+  // passport.authenticate('local', (err, user, info) => {
+  //   if (err) return res.status(500).json({ message: 'Login failed', error: err });
+  //   if (!user) return res.status(401).json({ message: info.message });
+
+  //   req.logIn(user, (err) => {
+  //     if (err) return res.status(500).json({ message: 'Login failed', error: err });
+  //     res.cookie('token', 'dummy-token', { httpOnly: true, sameSite: 'Lax' }); // Example token
+  //     return res.json({ message: 'Login successful', user });
+  //   });
+  // })(req, res, next);
   passport.authenticate('local', (err, user, info) => {
     if (err) return res.status(500).json({ message: 'Login failed', error: err });
     if (!user) return res.status(401).json({ message: info.message });
 
-    req.logIn(user, (err) => {
+    req.login(user, (err) => {
       if (err) return res.status(500).json({ message: 'Login failed', error: err });
-      return res.json({ message: 'Login successful', user });
+      
+      // Important: Send user data in a consistent format
+      return res.json({ 
+        message: 'Login successful', 
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+          role: user.role
+        }
+      });
     });
-  })(req, res, next);
+  })(req, res);
 };
