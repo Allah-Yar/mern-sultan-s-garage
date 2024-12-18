@@ -272,7 +272,7 @@ import { Typography, Button, Container } from '@mui/material';
 const Dashboard = () => {
   const handleLogout = () => {
     // Clear session or token and redirect to login
-    window.location.href = '/login';
+    window.location.href = '/';
   };
 
   return (

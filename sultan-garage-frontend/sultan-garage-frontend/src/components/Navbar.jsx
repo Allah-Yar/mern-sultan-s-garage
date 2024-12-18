@@ -229,6 +229,7 @@
 
 
 import * as React from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -243,14 +244,18 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-
+// import { useAuth } from './Auth/AuthContext';
 
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
+  
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+const [currentPage, setCurrentPage] = useState("home");
+const [isRegistering, setIsRegistering] = useState(false);
 
   const handleNavClick = (path) => {
     // Navigate to the path
@@ -273,13 +278,48 @@ function ResponsiveAppBar() {
     setAnchorElUser(event.currentTarget);
   };
 
+  const handleUserClick = (path) => {
+    navigate(path);
+    console.log("Navigating to:", path);
+  
+    switch(path) {
+      case "/register":
+        setIsLoggedIn(false);
+        setIsRegistering(true);
+        setCurrentPage("home");
+        break;
+      case "/login":
+        setIsLoggedIn(true);
+        setIsRegistering(false);
+        setCurrentPage("login");
+        break;
+      case "/dashboard":
+        setCurrentPage("dashboard");
+        break;
+      case "/":
+        
+        setCurrentPage("home");
+        break;
+      case "/logout":
+        setIsLoggedIn(false);
+        setIsRegistering(false);
+        setCurrentPage("home");
+        break;
+      default:
+        break;
+    }
+    setAnchorElUser(null);
+  };
+  
+
+
   // const handleCloseNavMenu = () => {
   //   setAnchorElNav(null);
   // };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  // const handleCloseUserMenu = () => {
+  //   setAnchorElUser(null);
+  // };
 
   return (
     <AppBar position="sticky">
@@ -366,8 +406,6 @@ function ResponsiveAppBar() {
           <Typography
             variant="h5"
             noWrap
-            // component={Link}
-            // to="/"
             onClick={() => handleNavClick('/')}
             sx={{
               mr: 2,
@@ -402,38 +440,25 @@ function ResponsiveAppBar() {
             </Button> */}
             <Button 
               onClick={() => handleNavClick('/services')}
-              // component={Link} 
-              // to="/services" 
-
               sx={{ my: 2, color: 'white', display: 'block' }}
-              // onClick={handleCloseNavMenu}
             >
               Services
             </Button>
             <Button 
               onClick={() => handleNavClick('/create')}
-              // component={Link} 
-              // to="/create" 
               sx={{ my: 2, color: 'white', display: 'block' }}
-              // onClick={handleCloseNavMenu}
             >
               Create Product
             </Button>
             <Button 
-              onClick={() => handleNavClick('/products')}
-              // component={Link} 
-              // to="/products" 
+              onClick={() => handleNavClick('/products')} 
               sx={{ my: 2, color: 'white', display: 'block' }}
-              // onClick={handleCloseNavMenu}
             >
               Products
             </Button>
             <Button 
-              onClick={() => handleNavClick('/contact')}
-              // component={Link} 
-              // to="/contact" 
+              onClick={() => handleNavClick('/contact')} 
               sx={{ my: 2, color: 'white', display: 'block' }}
-              // onClick={handleCloseNavMenu}
             >
               Contact
             </Button>
@@ -467,17 +492,54 @@ function ResponsiveAppBar() {
                 horizontal: 'right',
               }}
               open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+              // onClose={handleCloseUserMenu}
+              onClose={() => setAnchorElUser(null)}
+              
             >
-              <MenuItem onClick={() => handleNavClick('/register')}>
-              <Typography sx={{ textAlign: 'center' }}>Register</Typography>
-            </MenuItem>
-              <MenuItem onClick={() => handleNavClick('/login')}>
-              <Typography sx={{ textAlign: 'center' }}>Login</Typography>
-            </MenuItem>
-              <MenuItem onClick={() => handleNavClick('/dashboard')}>
-              <Typography sx={{ textAlign: 'center' }}>Dashboard</Typography>
-            </MenuItem>
+              <nav>
+                  {/* Always show Home */}
+      <MenuItem onClick={() => handleUserClick("/")}>
+        <Typography sx={{ textAlign: "center" }}>Home</Typography>
+      </MenuItem>
+
+      {/* Registration Time: Show Login with Home */}
+      {isRegistering && (
+        <MenuItem onClick={() => handleUserClick("/login")}>
+          <Typography sx={{ textAlign: "center" }}>Login</Typography>
+        </MenuItem>
+      )}
+
+      {/* Not Logged In and Not Registering: Show Login and Register */}
+      {!isLoggedIn && !isRegistering && (
+        <>
+          <MenuItem onClick={() => handleUserClick("/login")}>
+            <Typography sx={{ textAlign: "center" }}>Login</Typography>
+          </MenuItem>
+          <MenuItem onClick={() => handleUserClick("/register")}>
+            <Typography sx={{ textAlign: "center" }}>Register</Typography>
+          </MenuItem>
+        </>
+      )}
+
+      {/* Logged In and on Home Page: Show Dashboard */}
+      {isLoggedIn && currentPage === "home" && (
+        <MenuItem onClick={() => handleUserClick("/dashboard")}>
+          <Typography sx={{ textAlign: "center" }}>Dashboard</Typography>
+        </MenuItem>
+      )}
+
+      {/* Logged In on Dashboard: Show Logout */}
+      {isLoggedIn && currentPage === "dashboard" && (
+        <MenuItem onClick={() => handleUserClick("/logout")}>
+          <Typography sx={{ textAlign: "center" }}>Logout</Typography>
+        </MenuItem>
+      )}
+              
+        
+      
+      </nav>
+    
+
             </Menu>
           </Box>
         </Toolbar>

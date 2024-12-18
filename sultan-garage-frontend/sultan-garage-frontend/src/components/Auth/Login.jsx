@@ -8,12 +8,14 @@ import {
   IconButton, 
   InputAdornment 
 } from '@mui/material';
+
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import AuthService from './AuthService';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -71,9 +73,7 @@ const Login = () => {
     console.error('Login error:', err);
     console.error('Error response:', err.response);
     
-    const errorMessage = err.response?.data?.message || 
-                         err.message || 
-                         'Login failed';
+    const errorMessage = err.response?.data?.message ||  err.message || 'Login failed';
     setError(errorMessage);
   } finally {
     setIsLoading(false);
@@ -84,6 +84,7 @@ const Login = () => {
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
+ 
 
   return (
     <Container maxWidth="sm">
@@ -92,13 +93,24 @@ const Login = () => {
           marginTop: 8, 
           display: 'flex', 
           flexDirection: 'column', 
-          alignItems: 'center' 
+          alignItems: 'center',
+          padding: 3,
+          borderRadius: 2,
+          boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+          border: '1px solid #ccc',
+          marginBottom: 15
         }}
       >
         <Typography 
           component="h1" 
           variant="h4" 
           gutterBottom
+          sx={{
+            fontWeight: 'bold',
+            color: 'whitesmoke',
+            textAlign: 'center',
+            marginBottom: 4
+          }}
         >
           Admin Login
         </Typography>
@@ -109,6 +121,12 @@ const Login = () => {
           sx={{ width: '100%' }}
         >
           <TextField
+            sx={{ 
+              marginBottom: 2,
+              backgroundColor: 'white',
+              borderRadius: 2,
+              border: '1px solid ',
+            }}
             margin="normal"
             required
             fullWidth
@@ -123,6 +141,12 @@ const Login = () => {
             helperText={error && error.includes('email') ? error : ''}
           />
           <TextField
+            sx={{
+              marginBottom: 2,
+              backgroundColor: 'white',
+              borderRadius: 2,
+              border: '1px solid ',
+            }}
             margin="normal"
             required
             fullWidth
@@ -149,15 +173,23 @@ const Login = () => {
               )
             }}
           />
+          
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 3, mb: 2, 
+              '&:hover': {
+                backgroundColor: 'blue',
+              }
+            }}
             disabled={isLoading}
+            
+            
           >
             {isLoading ? 'Logging In...' : 'Login'}
           </Button>
+          
         </Box>
       </Box>
     </Container>
