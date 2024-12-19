@@ -6,8 +6,9 @@ import {
   Container, 
   Box, 
   IconButton, 
-  InputAdornment 
+  InputAdornment
 } from '@mui/material';
+
 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import AuthService from './AuthService';
@@ -26,6 +27,10 @@ const Login = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
     // Clear specific field error when user starts typing
     if (error) setError('');
+  };
+
+  const handleClickRegister = () => {
+    navigate('/register');
   };
 
   const handleSubmit = async (e) => {
@@ -189,7 +194,11 @@ const Login = () => {
           >
             {isLoading ? 'Logging In...' : 'Login'}
           </Button>
-          
+          <Button onClick={() => handleClickRegister()} variant="contained" color="secondary" sx={{ mt: 3, mb: 2 }}>
+            
+              Don&apos;t have an account? Register
+             
+          </Button>
         </Box>
       </Box>
     </Container>
