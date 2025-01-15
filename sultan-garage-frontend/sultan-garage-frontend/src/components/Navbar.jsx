@@ -710,9 +710,11 @@ function ResponsiveAppBar() {
                <MenuItem onClick={() => handleNavClick('/services')}>
                  <Typography sx={{ textAlign: 'center' }}>Services</Typography>
                </MenuItem>
+               {authStatus.isLoggedIn ?
                <MenuItem onClick={() => handleNavClick('/create')}>
                  <Typography sx={{ textAlign: 'center' }}>Create Product</Typography>
-               </MenuItem>
+               </MenuItem> : " "
+               }
                <MenuItem onClick={() => handleNavClick('/products')}>
                  <Typography sx={{ textAlign: 'center' }}>Products</Typography>
                </MenuItem>
@@ -753,9 +755,11 @@ function ResponsiveAppBar() {
               <Button onClick={() => handleNavClick('/services')} sx={{ my: 2, color: 'white', display: 'block' }}>
                Services
              </Button>
+             {authStatus.isLoggedIn ? 
              <Button onClick={() => handleNavClick('/create')} sx={{ my: 2, color: 'white', display: 'block' }}>
                Create Product
-             </Button>
+             </Button> : " "
+             }
              <Button onClick={() => handleNavClick('/products')} sx={{ my: 2, color: 'white', display: 'block' }}>
                Products
              </Button>

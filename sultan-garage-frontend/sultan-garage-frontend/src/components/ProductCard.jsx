@@ -28,7 +28,25 @@ const ProductCard = () => {
   const [loadingImages, setLoadingImages] = useState({});
   const [editingProduct, setEditingProduct] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [authStatus, setAuthStatus] = useState({
+    isRegistered: false,
+    isLoggedIn: false
+  });
 
+   // Check if user is already logged in on component mount
+   useEffect(() => {
+    const checkLoginStatus = () => {
+      // Check localStorage or sessionStorage for auth status
+      const registered = localStorage.getItem('isRegistered') === 'true';
+      const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      setAuthStatus({ isRegistered: registered, isLoggedIn: loggedIn });
+    };
+
+    checkLoginStatus();
+  }, []);
+
+
+  // This is used for products
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
@@ -203,31 +221,37 @@ const ProductCard = () => {
                 </Typography>
 
                 <Box 
-  sx={{ 
-    display: 'flex', 
-    justifyContent: 'space-between', // This will push buttons to opposite ends
-    alignItems: 'center', 
-    mt: 2 
-  }}
->
-  <Button
-    variant="contained"
-    color="primary"
-    onClick={() => handleEditClick(product)}
-    startIcon={<MdModeEdit />}
-  >
-    Edit
-  </Button>
+                  sx={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between', // This will push buttons to opposite ends
+                    alignItems: 'center', 
+                    mt: 2 
+                  }}
+                >
+                {authStatus.isLoggedIn ? (
+                    
+                  <>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleEditClick(product)}
+                  startIcon={<MdModeEdit />}
+                >
+                  Edit
+                </Button>
 
-  <Button
-    variant="contained"
-    color="error"
-    onClick={() => handleDeleteProduct(product._id)}
-    startIcon={<RiDeleteBinFill />}
-  >
-    Delete
-  </Button>
-</Box>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => handleDeleteProduct(product._id)}
+                  startIcon={<RiDeleteBinFill />}
+                >
+                  Delete
+                </Button>
+                </> ) : (
+                " "
+                        )}
+              </Box>
 
               </CardContent>
             </Card>
@@ -247,6 +271,7 @@ const ProductCard = () => {
           sx={{ textAlign: 'center', mt: 4, color: '#555' }}
         >
           No Products Found 
+          {authStatus.isLoggedIn ? 
           <Link 
             href="/create"  
             variant='h5'  
@@ -261,7 +286,10 @@ const ProductCard = () => {
             }} 
           >
             Create New Product
-          </Link>
+          </Link> :
+          " "
+          }
+
         </Typography>
       ) : (
         filteredProducts.length === 0 && (
