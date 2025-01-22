@@ -49,7 +49,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: { 
-      secure: false,
+      secure: true,
       }
 }));
 
@@ -92,6 +92,8 @@ passport.deserializeUser(function(user, cb) {
     return cb(null, user);
   });
 });
+
+
 
 
 // Update Google Strategy implementation
