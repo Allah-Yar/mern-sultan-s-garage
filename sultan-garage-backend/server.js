@@ -8,7 +8,7 @@ import session from 'express-session';
 import passport from 'passport';
 import passportLocalMongoose from 'passport-local-mongoose';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import { Strategy as LocalStrategy } from 'passport-local'; // Using ES6 import syntax
+// import { Strategy as LocalStrategy } from 'passport-local'; // Using ES6 import syntax
 import findOrCreate from 'mongoose-findorcreate';
 // import passport from './config/passportConfig.js';
 import  productRoutes from './routes/productRoutes.js';
@@ -98,8 +98,8 @@ passport.deserializeUser(function(user, cb) {
 
 // Update Google Strategy implementation
 passport.use(new GoogleStrategy({
-  clientID: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET,
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: process.env.GOOGLE_CALLBACK_URL ,
 },
 function(accessToken, refreshToken, profile, done) {
@@ -132,25 +132,25 @@ function(accessToken, refreshToken, profile, done) {
 //   }
 // }));
 // Update the Local Strategy implementation
-passport.use(new LocalStrategy(
-  async (username, password, done) => {
-    try {
-      const user = await User.findOne({ username });
-      if (!user) {
-        return done(null, false, { message: 'Invalid username' });
-      }
+// passport.use(new LocalStrategy(
+//   async (username, password, done) => {
+//     try {
+//       const user = await User.findOne({ username });
+//       if (!user) {
+//         return done(null, false, { message: 'Invalid username' });
+//       }
       
-      const isValid = await user.authenticate(password);
-      if (!isValid) {
-        return done(null, false, { message: 'Invalid password' });
-      }
+//       const isValid = await user.authenticate(password);
+//       if (!isValid) {
+//         return done(null, false, { message: 'Invalid password' });
+//       }
 
-      return done(null, user);
-    } catch (err) {
-      return done(err);
-    }
-  }
-));
+//       return done(null, user);
+//     } catch (err) {
+//       return done(err);
+//     }
+//   }
+// ));
 // Add error handling middleware before your routes
 app.use((error, req, res, next) => {
   if (error.name === 'ValidationError') {
