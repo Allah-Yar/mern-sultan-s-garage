@@ -13,8 +13,11 @@ export default defineConfig({
     server: {
       proxy: {
         '/api' : {
-          target : 'http://localhost:3000', // link to backend
+          target:  'http://localhost:3000', // Use environment variable for production
+          changeOrigin: true,
+          secure: false, // set to true in production if using HTTPS
         },
       },
     }
 });
+

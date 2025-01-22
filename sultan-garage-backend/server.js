@@ -30,7 +30,7 @@ const PORT = process.env.PORT || 3000;
 db();
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Allow only the frontend app to make requests
+    origin:  process.env.FRONTEND_URL || 'http://localhost:5173', // Allow only the frontend app to make requests
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific methods (optional)
     credentials: true,
   }));
