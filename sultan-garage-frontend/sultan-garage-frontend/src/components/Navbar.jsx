@@ -169,7 +169,7 @@ function ResponsiveAppBar() {
       return (
         <>
           <Button
-            href="http://localhost:3000/dashboard"
+            href="https://sultan-garage-production.up.railway.app/dashboard"
             variant="contained"
             color="success"
             size="large"
@@ -206,7 +206,7 @@ function ResponsiveAppBar() {
   
     return (
       <Button
-        href="http://localhost:3000/login"
+        href="https://sultan-garage-production.up.railway.app/login"
         onClick={handleLogin}
         variant="contained"
         color="primary"
