@@ -24,46 +24,84 @@ export const useProductStore = create((set) => ({
       });
     }
   },
-  
-
-  createProduct: async (formData) => {
+  createProduct: async (productData) => {
     try {
+      // Create FormData
+      const formData = new FormData();
+      formData.append('name', productData.name);
+      formData.append('price', productData.price);
+      formData.append('category', productData.category);
+      formData.append('image', productData.image);
+
       const response = await fetch('https://sultan-garage-production.up.railway.app/api/products', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
+          // Don't set Content-Type - browser will set it with boundary for FormData
         },
-        body: formData,
+        body: formData
       });
 
-      const contentType = response.headers.get('content-type');
-      const responseData = contentType?.includes('application/json') 
-        ? await response.json()
-        : await response.text();
-
+      // Log response for debugging
+      console.log('Response status:', response.status);
+      
       if (!response.ok) {
-        throw new Error(
-          typeof responseData === 'string' 
-            ? responseData 
-            : responseData.message || 'Failed to create product'
-        );
+        const errorText = await response.text();
+        console.error('Server error:', errorText);
+        throw new Error('Server error: ' + response.status);
       }
 
-      const data = typeof responseData === 'string' ? JSON.parse(responseData) : responseData;
-      set(state => ({
-        products: [...state.products, data],
-        error: null
-      }));
-      
+      const data = await response.json();
       return { success: true, data };
+
     } catch (error) {
-      console.error('Product creation error:', error);
-      return { 
-        success: false, 
+      console.error('Product creation failed:', error);
+      return {
+        success: false,
         message: error.message || 'Failed to create product'
       };
     }
   },
+  
+
+  // createProduct: async (formData) => {
+  //   try {
+  //     const response = await fetch('https://sultan-garage-production.up.railway.app/api/products', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Accept': 'application/json',
+  //       },
+  //       body: formData,
+  //     });
+
+  //     const contentType = response.headers.get('content-type');
+  //     const responseData = contentType?.includes('application/json') 
+  //       ? await response.json()
+  //       : await response.text();
+
+  //     if (!response.ok) {
+  //       throw new Error(
+  //         typeof responseData === 'string' 
+  //           ? responseData 
+  //           : responseData.message || 'Failed to create product'
+  //       );
+  //     }
+
+  //     const data = typeof responseData === 'string' ? JSON.parse(responseData) : responseData;
+  //     set(state => ({
+  //       products: [...state.products, data],
+  //       error: null
+  //     }));
+      
+  //     return { success: true, data };
+  //   } catch (error) {
+  //     console.error('Product creation error:', error);
+  //     return { 
+  //       success: false, 
+  //       message: error.message || 'Failed to create product'
+  //     };
+  //   }
+  // },
 
   //  createProduct: async (formData) => {
   //   try {

@@ -104,22 +104,45 @@ const CreateProductDetails =  () => {
       //     setIsSubmitting(false);
       //   }
       // };
+      // const handleSubmit = async (e) => {
+      //   e.preventDefault();
+      
+      //   const formData = new FormData();
+      //   formData.append('name', productData.name.trim());
+      //   formData.append('price', String(productData.price));
+      //   formData.append('category', productData.category.trim());
+      //   if (productData.image instanceof File) {
+      //     formData.append('image', productData.image);
+      //   }
+      
+      //   const result = await createProduct(formData);
+      //   if (result.success) {
+      //     navigate('/products');
+      //   } else {
+      //     alert(result.message);
+      //   }
+      // };
+
       const handleSubmit = async (e) => {
         e.preventDefault();
-      
-        const formData = new FormData();
-        formData.append('name', productData.name.trim());
-        formData.append('price', String(productData.price));
-        formData.append('category', productData.category.trim());
-        if (productData.image instanceof File) {
-          formData.append('image', productData.image);
+        
+        // Validate before submission
+        if (!productData.name || !productData.price || !productData.category || !productData.image) {
+          alert('All fields are required');
+          return;
         }
       
-        const result = await createProduct(formData);
-        if (result.success) {
-          navigate('/products');
-        } else {
-          alert(result.message);
+        try {
+          const result = await createProduct(productData);
+          if (result.success) {
+            alert('Product created successfully');
+            navigate('/products');
+          } else {
+            alert(result.message);
+          }
+        } catch (error) {
+          console.error('Submission error:', error);
+          alert('Failed to create product');
         }
       };
     
