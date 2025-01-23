@@ -52,23 +52,25 @@ const CreateProductDetails =  () => {
         setError("");
         setIsSubmitting(true);
 
-
+         
         
     
         // Submit Product Data
         try {
-
           // Validate the form data
-          if (!productData.name || !productData.price || !productData.image) {
-            alert("Please fill in all fields and upload an image.");
-            return;
-          }
-      
-          // Validate Price
-          if (isNaN(productData.price) || productData.price <= 0) {
-            alert("Price must be a valid number greater than zero.");
-            return;
-          }
+         if (!productData.name || !productData.price || !productData.image) {
+          alert("Please fill in all fields and upload an image.");
+          throw new Error("Please fill all required fields");
+          
+        }
+    
+        // Validate Price
+        if (isNaN(productData.price) || productData.price <= 0) {
+          alert("Price must be a valid number greater than zero.");
+          return;
+        }
+
+         
 
              // Create FormData for file upload
               const formData = new FormData();
@@ -78,8 +80,8 @@ const CreateProductDetails =  () => {
               formData.append('image', productData.image);
               
 
-          const { success, message } = await createProduct(productData);
-          if (success) {
+          const response = await createProduct(productData);
+          if (response.success) {
             alert("Product created successfully!");
             // Only navigate after successful creation
             navigate("/products");
@@ -91,13 +93,13 @@ const CreateProductDetails =  () => {
               imagePreview: "",
             });
           } else {
-            setError(message || "Failed to create product");
-            alert(`Product creation failed: ${message}`);
+            throw new Error(response.message || "Failed to create product");
+            
           }
         } catch (error) {
           console.error("Error creating product", error);
           setError(error.message || "An unexpected error occurred");
-          alert("An error occurred while creating the product.");
+          alert(error.message, "An error occurred while creating the product.");
         } finally {
           setIsSubmitting(false);
         }
