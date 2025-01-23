@@ -11,7 +11,7 @@ export const useProductStore = create((set) => ({
   fetchProducts: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await fetch('/api/products');
+      const res = await fetch('https://sultan-garage-production.up.railway.app/api/products');
       if (!res.ok) {
         throw new Error('Failed to fetch products');
       }
@@ -39,7 +39,7 @@ export const useProductStore = create((set) => ({
       formData.append("image", newProduct.image);
       formData.append("category", newProduct.category);
 
-      const res = await fetch("/api/products", {
+      const res = await fetch("https://sultan-garage-production.up.railway.app/api/products", {
         method: "POST",
         credentials: "include", // Ensures cookies are sent
         body: formData,
@@ -69,7 +69,7 @@ export const useProductStore = create((set) => ({
   // Delete Product
   deleteProduct: async (productId) => {
     try {
-      const res = await fetch(`/api/products/${productId}`, {
+      const res = await fetch(`https://sultan-garage-production.up.railway.app/api/products/${productId}`, {
         method: "DELETE",
       });
       
@@ -109,7 +109,7 @@ export const useProductStore = create((set) => ({
         formData.append("image", updatedProduct.image);
       }
   
-      const res = await fetch(`/api/products/${productId}`, {
+      const res = await fetch(`https://sultan-garage-production.up.railway.app/api/products/${productId}`, {
         method: "PUT",
         body: formData,
       });
