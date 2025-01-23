@@ -52,12 +52,7 @@ const CreateProductDetails =  () => {
         setError("");
         setIsSubmitting(true);
 
-         
-        
-    
-        // Submit Product Data
-        try {
-          // Validate the form data
+         // Validate the form data
          if (!productData.name || !productData.price || !productData.image) {
           alert("Please fill in all fields and upload an image.");
           throw new Error("Please fill all required fields");
@@ -69,6 +64,11 @@ const CreateProductDetails =  () => {
           alert("Price must be a valid number greater than zero.");
           return;
         }
+        
+    
+        // Submit Product Data
+        try {
+          
 
          
 
