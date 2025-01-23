@@ -24,22 +24,37 @@ export const useProductStore = create((set) => ({
       });
     }
   },
+  
 
-   createProduct: async (formData) => {
+  createProduct: async (formData) => {
     try {
       const response = await fetch('https://sultan-garage-production.up.railway.app/api/products', {
         method: 'POST',
-        
-        body: formData, // Send FormData directly
-        credentials: 'include', // If using cookies
+        headers: {
+          'Accept': 'application/json',
+        },
+        body: formData,
       });
-  
+
+      const contentType = response.headers.get('content-type');
+      const responseData = contentType?.includes('application/json') 
+        ? await response.json()
+        : await response.text();
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create product');
+        throw new Error(
+          typeof responseData === 'string' 
+            ? responseData 
+            : responseData.message || 'Failed to create product'
+        );
       }
-  
-      const data = await response.json();
+
+      const data = typeof responseData === 'string' ? JSON.parse(responseData) : responseData;
+      set(state => ({
+        products: [...state.products, data],
+        error: null
+      }));
+      
       return { success: true, data };
     } catch (error) {
       console.error('Product creation error:', error);
@@ -49,6 +64,31 @@ export const useProductStore = create((set) => ({
       };
     }
   },
+
+  //  createProduct: async (formData) => {
+  //   try {
+  //     const response = await fetch('https://sultan-garage-production.up.railway.app/api/products', {
+  //       method: 'POST',
+        
+  //       body: formData, // Send FormData directly
+  //       credentials: 'include', // If using cookies
+  //     });
+  
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(errorData.message || 'Failed to create product');
+  //     }
+  
+  //     const data = await response.json();
+  //     return { success: true, data };
+  //   } catch (error) {
+  //     console.error('Product creation error:', error);
+  //     return { 
+  //       success: false, 
+  //       message: error.message || 'Failed to create product'
+  //     };
+  //   }
+  // },
 
   // // Create Products
   // createProduct: async (newProduct) => {

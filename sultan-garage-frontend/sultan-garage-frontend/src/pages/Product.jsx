@@ -9,8 +9,8 @@ import { useProductStore } from "../store/productStore.js";
 
 const CreateProductDetails =  () => {
     const navigate = useNavigate();
-    const [error, setError] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    // const [error, setError] = useState("");
+    // const [isSubmitting, setIsSubmitting] = useState(false);
     const [productData, setProductData] = useState({
         name: "",
         price: "",
@@ -47,61 +47,79 @@ const CreateProductDetails =  () => {
       };
     
       // Handle Form Submit
-      const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError("");
-        setIsSubmitting(true);
+      // const handleSubmit = async (e) => {
+      //   e.preventDefault();
+      //   setError("");
+      //   setIsSubmitting(true);
 
-         // Validate the form data
-         if (!productData.name || !productData.price || !productData.image) {
-          alert("Please fill in all fields and upload an image.");
-          throw new Error("Please fill all required fields");
+      //    // Validate the form data
+      //    if (!productData.name || !productData.price || !productData.image) {
+      //     alert("Please fill in all fields and upload an image.");
+      //     throw new Error("Please fill all required fields");
           
-        }
+      //   }
     
-        // Validate Price
-        if (isNaN(productData.price) || productData.price <= 0) {
-          alert("Price must be a valid number greater than zero.");
-          return;
-        }
+      //   // Validate Price
+      //   if (isNaN(productData.price) || productData.price <= 0) {
+      //     alert("Price must be a valid number greater than zero.");
+      //     return;
+      //   }
         
     
-        // Submit Product Data
-        try {
+      //   // Submit Product Data
+      //   try {
           
 
          
 
-             // Create FormData for file upload
-              const formData = new FormData();
-              formData.append('name', productData.name);
-              formData.append('price', productData.price);
-              formData.append('category', productData.category);
-              formData.append('image', productData.image);
+      //        // Create FormData for file upload
+      //         const formData = new FormData();
+      //         formData.append('name', productData.name);
+      //         formData.append('price', productData.price);
+      //         formData.append('category', productData.category);
+      //         formData.append('image', productData.image);
               
 
-          const response = await createProduct(productData);
-          if (response.success) {
-            alert("Product created successfully!");
-            // Only navigate after successful creation
-            navigate("/products");
-            setProductData({
-              name: "",
-              price: "",
-              category: "",
-              image: null,
-              imagePreview: "",
-            });
-          } else {
-            throw new Error(response.message || "Failed to create product");
+      //     const response = await createProduct(productData);
+      //     if (response.success) {
+      //       alert("Product created successfully!");
+      //       // Only navigate after successful creation
+      //       navigate("/products");
+      //       setProductData({
+      //         name: "",
+      //         price: "",
+      //         category: "",
+      //         image: null,
+      //         imagePreview: "",
+      //       });
+      //     } else {
+      //       throw new Error(response.message || "Failed to create product");
             
-          }
-        } catch (error) {
-          console.error("Error creating product", error);
-          setError(error.message || "An unexpected error occurred");
-          alert(error.message, "An error occurred while creating the product.");
-        } finally {
-          setIsSubmitting(false);
+      //     }
+      //   } catch (error) {
+      //     console.error("Error creating product", error);
+      //     setError(error.message || "An unexpected error occurred");
+      //     alert(error.message, "An error occurred while creating the product.");
+      //   } finally {
+      //     setIsSubmitting(false);
+      //   }
+      // };
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+      
+        const formData = new FormData();
+        formData.append('name', productData.name.trim());
+        formData.append('price', String(productData.price));
+        formData.append('category', productData.category.trim());
+        if (productData.image instanceof File) {
+          formData.append('image', productData.image);
+        }
+      
+        const result = await createProduct(formData);
+        if (result.success) {
+          navigate('/products');
+        } else {
+          alert(result.message);
         }
       };
     
@@ -112,11 +130,11 @@ const CreateProductDetails =  () => {
         Create Product
       </Typography>
 
-      {error && (
+      {/* {error && (
         <Typography color="error" style={{ marginBottom: "1rem" }}>
           {error}
         </Typography>
-      )}
+      )} */}
 
       <form onSubmit={handleSubmit}>
         {/* Product Name */}
@@ -197,9 +215,10 @@ const CreateProductDetails =  () => {
           color="primary"
           fullWidth
           style={{ marginTop: "20px" }}
-          disabled={isSubmitting}
+          // disabled={isSubmitting}
         >
-          {isSubmitting ? "Creating..." : "Add Product"}
+          {/* {isSubmitting ? "Creating..." : "Add Product"} */}
+          Add Product
         </Button>
         
       </form>
