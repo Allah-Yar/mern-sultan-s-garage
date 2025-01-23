@@ -9,7 +9,7 @@ import {
   TextField,
   Button,
   Skeleton,
-  Link,
+  
 } from '@mui/material';
 import EditProductModal from './ProductModal';
 import { ToastContainer, toast } from 'react-toastify';
@@ -17,10 +17,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { RiDeleteBinFill } from "react-icons/ri";
 import { MdModeEdit } from "react-icons/md";
 import { useProductStore } from '../store/productStore';
-
+import { useNavigate } from 'react-router-dom';
 import hero from '../assets/images/hero.jpg';
 
 const ProductCard = () => {
+  const navigate = useNavigate();
+  // const [anchorElNav, setAnchorElNav] = useState(null);
   const { products, fetchProducts, loading, error } = useProductStore();
   const { deleteProduct } = useProductStore();
   const [searchTerm, setSearchTerm] = useState('');
@@ -123,6 +125,12 @@ const ProductCard = () => {
   const handleEditModalClose = () => {
     setIsEditModalOpen(false);
     setEditingProduct(null);
+  };
+
+  const handleNavClick = (path) => {
+    navigate(path);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
   };
 
   if (error) {
@@ -272,8 +280,8 @@ const ProductCard = () => {
         >
           No Products Found 
           {authStatus.isLoggedIn ? 
-          <Link 
-            href="https://sultans-garage.vercel.app/create"  
+          <Button
+          onClick={() => handleNavClick('/create')}
             variant='h5'  
             sx={{ 
               display: 'block', 
@@ -284,9 +292,10 @@ const ProductCard = () => {
                 color: 'blue',
               },
             }} 
+           
           >
             Create New Product
-          </Link> :
+          </Button> :
           " "
           }
 
