@@ -9,8 +9,7 @@ import { useProductStore } from "../store/productStore.js";
 
 const CreateProductDetails =  () => {
     const navigate = useNavigate();
-    // const [error, setError] = useState("");
-    // const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [productData, setProductData] = useState({
         name: "",
         price: "",
@@ -21,9 +20,9 @@ const CreateProductDetails =  () => {
     
       const { createProduct } = useProductStore();
 
-      // const handleNavigation = (path) => {
-      //   navigate(path)
-      // }
+      const handleNavigation = (path) => {
+        navigate(path)
+      }
     
       // Handle Add Product
       const handleAddProduct = (e) => {
@@ -47,102 +46,40 @@ const CreateProductDetails =  () => {
       };
     
       // Handle Form Submit
-      // const handleSubmit = async (e) => {
-      //   e.preventDefault();
-      //   setError("");
-      //   setIsSubmitting(true);
-
-      //    // Validate the form data
-      //    if (!productData.name || !productData.price || !productData.image) {
-      //     alert("Please fill in all fields and upload an image.");
-      //     throw new Error("Please fill all required fields");
-          
-      //   }
-    
-      //   // Validate Price
-      //   if (isNaN(productData.price) || productData.price <= 0) {
-      //     alert("Price must be a valid number greater than zero.");
-      //     return;
-      //   }
-        
-    
-      //   // Submit Product Data
-      //   try {
-          
-
-         
-
-      //        // Create FormData for file upload
-      //         const formData = new FormData();
-      //         formData.append('name', productData.name);
-      //         formData.append('price', productData.price);
-      //         formData.append('category', productData.category);
-      //         formData.append('image', productData.image);
-              
-
-      //     const response = await createProduct(productData);
-      //     if (response.success) {
-      //       alert("Product created successfully!");
-      //       // Only navigate after successful creation
-      //       navigate("/products");
-      //       setProductData({
-      //         name: "",
-      //         price: "",
-      //         category: "",
-      //         image: null,
-      //         imagePreview: "",
-      //       });
-      //     } else {
-      //       throw new Error(response.message || "Failed to create product");
-            
-      //     }
-      //   } catch (error) {
-      //     console.error("Error creating product", error);
-      //     setError(error.message || "An unexpected error occurred");
-      //     alert(error.message, "An error occurred while creating the product.");
-      //   } finally {
-      //     setIsSubmitting(false);
-      //   }
-      // };
-      // const handleSubmit = async (e) => {
-      //   e.preventDefault();
-      
-      //   const formData = new FormData();
-      //   formData.append('name', productData.name.trim());
-      //   formData.append('price', String(productData.price));
-      //   formData.append('category', productData.category.trim());
-      //   if (productData.image instanceof File) {
-      //     formData.append('image', productData.image);
-      //   }
-      
-      //   const result = await createProduct(formData);
-      //   if (result.success) {
-      //     navigate('/products');
-      //   } else {
-      //     alert(result.message);
-      //   }
-      // };
-
       const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        // Validate before submission
-        if (!productData.name || !productData.price || !productData.category || !productData.image) {
-          alert('All fields are required');
+        setIsLoading(true);
+    
+        // Validate the form data
+        if (!productData.name || !productData.price || !productData.image) {
+          alert("Please fill in all fields and upload an image.");
           return;
         }
-      
+    
+        // Validate Price
+        if (isNaN(productData.price) || productData.price <= 0) {
+          alert("Price must be a valid number greater than zero.");
+          return;
+        }
+    
+        // Submit Product Data
         try {
-          const result = await createProduct(productData);
-          if (result.success) {
-            alert('Product created successfully');
-            navigate('/products');
+          const { success, message } = await createProduct(productData);
+          if (success) {
+            alert("Product created successfully!");
+            setProductData({
+              name: "",
+              price: "",
+              category: "",
+              image: null,
+              imagePreview: "",
+            });
           } else {
-            alert(result.message);
+            alert(`Product creation failed: ${message}`);
           }
         } catch (error) {
-          console.error('Submission error:', error);
-          alert('Failed to create product');
+          console.error("Error creating product", error);
+          alert("An error occurred while creating the product.");
         }
       };
     
@@ -152,12 +89,6 @@ const CreateProductDetails =  () => {
       <Typography variant="h4" gutterBottom>
         Create Product
       </Typography>
-
-      {/* {error && (
-        <Typography color="error" style={{ marginBottom: "1rem" }}>
-          {error}
-        </Typography>
-      )} */}
 
       <form onSubmit={handleSubmit}>
         {/* Product Name */}
@@ -221,27 +152,17 @@ const CreateProductDetails =  () => {
 
         {/* Submit Button */}
      
-        {/* <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          style={{ marginTop: "20px" }}
-          onClick={() => handleNavigation("/products")}
-        >
-          Add Product
-        </Button> */}
-
         <Button
           type="submit"
           variant="contained"
           color="primary"
           fullWidth
           style={{ marginTop: "20px" }}
-          // disabled={isSubmitting}
+          disabled={isLoading}
+          onClick={() => handleNavigation("/products")}
         >
-          {/* {isSubmitting ? "Creating..." : "Add Product"} */}
-          Add Product
+          {isLoading ? "Loading..." : "Add Product"}
+         
         </Button>
         
       </form>
