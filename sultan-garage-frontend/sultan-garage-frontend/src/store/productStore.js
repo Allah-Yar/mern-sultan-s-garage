@@ -27,8 +27,11 @@ export const useProductStore = create((set) => ({
 
    createProduct: async (formData) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/products/create`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/products`, {
         method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+        },
         body: formData, // Send FormData directly
         credentials: 'include', // If using cookies
       });
