@@ -59,7 +59,7 @@ const ProductCard = () => {
     }
 
     if (product.image.startsWith('/uploads')) {
-      const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://sultan-garage-production.up.railway.app';
+      const baseURL =  'https://sultan-garage-production.up.railway.app';
       return `${baseURL}${product.image}`;
     }
 

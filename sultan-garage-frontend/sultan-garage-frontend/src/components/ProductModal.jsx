@@ -37,7 +37,7 @@ const EditProductModal = ({ open, handleClose, product }) => {
       
       setImagePreview(
         product.image && product.image.startsWith('/uploads') 
-          ? `${import.meta.env.VITE_API_BASE_URL || ''}${product.image}` 
+          ? `${'https://sultan-garage-production.up.railway.app'}${product.image}` 
           : product.image
       );
     }
