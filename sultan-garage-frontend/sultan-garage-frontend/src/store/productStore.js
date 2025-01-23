@@ -25,45 +25,69 @@ export const useProductStore = create((set) => ({
     }
   },
 
-  // Create Products
-  createProduct: async (newProduct) => {
-    // Validate required fields
-    if (!newProduct.name || !newProduct.image || !newProduct.price) {
-      return { success: false, message: "Please fill in all fields" };
-    }
-
+   createProduct: async (productData) => {
     try {
-      const formData = new FormData();
-      formData.append("name", newProduct.name);
-      formData.append("price", newProduct.price);
-      formData.append("image", newProduct.image);
-      formData.append("category", newProduct.category);
-
-      const res = await fetch("https://sultan-garage-production.up.railway.app/api/products", {
-        method: "POST",
-        credentials: "include", // Ensures cookies are sent
-        body: formData,
+      const response = await fetch("https://sultan-garage-production.up.railway.app/api/products", {
+        method: 'POST',
+        body: productData, // Send FormData directly
+        credentials: 'include', // If using cookies
       });
-
-      if (!res.ok) {
-        throw new Error('Failed to create product');
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to create product');
       }
-
-      const data = await res.json();
-
-      // Update the products state
-      set((state) => ({
-        products: [...state.products, data.data],
-      }));
-
-      return { success: true, message: "Product created successfully" };
+  
+      const data = await response.json();
+      return { success: true, data };
     } catch (error) {
+      console.error('Product creation error:', error);
       return { 
         success: false, 
-        message: error.message || "An error occurred" 
+        message: error.message || 'Failed to create product'
       };
     }
   },
+
+  // // Create Products
+  // createProduct: async (newProduct) => {
+  //   // Validate required fields
+  //   if (!newProduct.name || !newProduct.image || !newProduct.price) {
+  //     return { success: false, message: "Please fill in all fields" };
+  //   }
+
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("name", newProduct.name);
+  //     formData.append("price", newProduct.price);
+  //     formData.append("image", newProduct.image);
+  //     formData.append("category", newProduct.category);
+
+  //     const res = await fetch("https://sultan-garage-production.up.railway.app/api/products", {
+  //       method: "POST",
+  //       credentials: "include", // Ensures cookies are sent
+  //       body: productData,
+  //     });
+
+  //     if (!res.ok) {
+  //       throw new Error('Failed to create product');
+  //     }
+
+  //     const data = await res.json();
+
+  //     // Update the products state
+  //     set((state) => ({
+  //       products: [...state.products, data.data],
+  //     }));
+
+  //     return { success: true, message: "Product created successfully" };
+  //   } catch (error) {
+  //     return { 
+  //       success: false, 
+  //       message: error.message || "An error occurred" 
+  //     };
+  //   }
+  // },
 
  
   // Delete Product

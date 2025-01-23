@@ -9,6 +9,8 @@ import { useProductStore } from "../store/productStore.js";
 
 const CreateProductDetails =  () => {
     const navigate = useNavigate();
+    const [error, setError] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [productData, setProductData] = useState({
         name: "",
         price: "",
@@ -19,9 +21,9 @@ const CreateProductDetails =  () => {
     
       const { createProduct } = useProductStore();
 
-      const handleNavigation = (path) => {
-        navigate(path)
-      }
+      // const handleNavigation = (path) => {
+      //   navigate(path)
+      // }
     
       // Handle Add Product
       const handleAddProduct = (e) => {
@@ -47,24 +49,40 @@ const CreateProductDetails =  () => {
       // Handle Form Submit
       const handleSubmit = async (e) => {
         e.preventDefault();
-    
-        // Validate the form data
-        if (!productData.name || !productData.price || !productData.image) {
-          alert("Please fill in all fields and upload an image.");
-          return;
-        }
-    
-        // Validate Price
-        if (isNaN(productData.price) || productData.price <= 0) {
-          alert("Price must be a valid number greater than zero.");
-          return;
-        }
+        setError("");
+        setIsSubmitting(true);
+
+
+        
     
         // Submit Product Data
         try {
+
+          // Validate the form data
+          if (!productData.name || !productData.price || !productData.image) {
+            alert("Please fill in all fields and upload an image.");
+            return;
+          }
+      
+          // Validate Price
+          if (isNaN(productData.price) || productData.price <= 0) {
+            alert("Price must be a valid number greater than zero.");
+            return;
+          }
+
+             // Create FormData for file upload
+              const formData = new FormData();
+              formData.append('name', productData.name);
+              formData.append('price', productData.price);
+              formData.append('category', productData.category);
+              formData.append('image', productData.image);
+              formData.append('imagePreview', productData.imagePreview);
+
           const { success, message } = await createProduct(productData);
           if (success) {
             alert("Product created successfully!");
+            // Only navigate after successful creation
+            navigate("/products");
             setProductData({
               name: "",
               price: "",
@@ -73,11 +91,15 @@ const CreateProductDetails =  () => {
               imagePreview: "",
             });
           } else {
+            setError(message || "Failed to create product");
             alert(`Product creation failed: ${message}`);
           }
         } catch (error) {
           console.error("Error creating product", error);
+          setError(error.message || "An unexpected error occurred");
           alert("An error occurred while creating the product.");
+        } finally {
+          setIsSubmitting(false);
         }
       };
     
@@ -87,6 +109,12 @@ const CreateProductDetails =  () => {
       <Typography variant="h4" gutterBottom>
         Create Product
       </Typography>
+
+      {error && (
+        <Typography color="error" style={{ marginBottom: "1rem" }}>
+          {error}
+        </Typography>
+      )}
 
       <form onSubmit={handleSubmit}>
         {/* Product Name */}
@@ -150,7 +178,7 @@ const CreateProductDetails =  () => {
 
         {/* Submit Button */}
      
-        <Button
+        {/* <Button
           type="submit"
           variant="contained"
           color="primary"
@@ -159,6 +187,17 @@ const CreateProductDetails =  () => {
           onClick={() => handleNavigation("/products")}
         >
           Add Product
+        </Button> */}
+
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          style={{ marginTop: "20px" }}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Creating..." : "Add Product"}
         </Button>
         
       </form>
