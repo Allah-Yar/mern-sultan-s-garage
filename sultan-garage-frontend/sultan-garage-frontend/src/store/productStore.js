@@ -27,7 +27,7 @@ export const useProductStore = create((set) => ({
 
    createProduct: async (formData) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/products/create`, {
+      const response = await fetch('https://sultan-garage-production.up.railway.app/api/products', {
         method: 'POST',
         
         body: formData, // Send FormData directly
