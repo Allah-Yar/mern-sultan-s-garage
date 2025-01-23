@@ -76,7 +76,7 @@ const CreateProductDetails =  () => {
               formData.append('price', productData.price);
               formData.append('category', productData.category);
               formData.append('image', productData.image);
-              formData.append('imagePreview', productData.imagePreview);
+              
 
           const { success, message } = await createProduct(productData);
           if (success) {
