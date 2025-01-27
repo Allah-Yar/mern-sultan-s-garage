@@ -30,7 +30,7 @@ const PORT = process.env.PORT || 3000;
 db();
 
 app.use(cors({
-    origin:  'https://sultans-garage.vercel.app' || 'http://localhost:5173', // Allow only the frontend app to make requests
+    origin: ['https://sultans-garage.vercel.app', 'http://localhost:5173'], // Array format for multiple origins
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific methods (optional)
     credentials: true,
   }));
@@ -49,7 +49,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: { 
-      secure: true,
+      secure: process.env.NODE_ENV
       }
 }));
 
@@ -267,10 +267,10 @@ app.post("/register", async (req, res) => {
 
 
 
-// app.use((err, req, res, next) => {
-//   console.error(err); // Log the error
-//   res.status(500).send("Internal Server Error"); // Respond with a 500 status code
-// });
+app.use((err, req, res, next) => {
+  console.error(err); // Log the error
+  res.status(500).send("Internal Server Error"); // Respond with a 500 status code
+});
 
 // app.use(authRoutes);
 app.use(productRoutes);
