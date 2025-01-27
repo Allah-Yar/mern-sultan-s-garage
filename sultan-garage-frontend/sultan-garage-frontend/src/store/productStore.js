@@ -38,7 +38,7 @@ export const useProductStore = create((set) => ({
       const formData = new FormData();
       formData.append("name", newProduct.name);
       formData.append("price", newProduct.price);
-      formData.append("image", newProduct.image);
+      // formData.append("image", newProduct.image);
       formData.append("category", newProduct.category);
 
       const res = await fetch("https://sultan-garage-production.up.railway.app/api/products", {

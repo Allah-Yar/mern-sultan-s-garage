@@ -8,7 +8,7 @@ const app = express()
 // __dirname
 const __dirname = path.resolve();
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => { cb(null, path.join(process.cwd(), "uploads/"));}, // Save files in the "uploads" folder
@@ -47,7 +47,7 @@ export const getProductById = async (req, res) => {
 }
 
 export const createProduct = [ 
-    upload.single("image"),
+    // upload.single("image"),
     async(req, res) => {
     try {
       console.log("Request Body:", req.body);
@@ -59,7 +59,7 @@ export const createProduct = [
             name: req.body.name,
             price: req.body.price,
             category: req.body.category,
-            image: `/uploads/${req.file.filename}`, // Use the uploaded image path
+            // image: `/uploads/${req.file.filename}`, // Use the uploaded image path
             // description: req.body.description,
             
             // rating: req.body.rating,
