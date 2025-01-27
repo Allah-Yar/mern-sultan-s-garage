@@ -3,7 +3,7 @@ import  Product from "../models/Product.js"
 import path from "path"
 import express from 'express'
 import multer from "multer";
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary  from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import dotenv from "dotenv";
 
@@ -19,10 +19,10 @@ cloudinary.config({
 
 // Configure Multer to Use Cloudinary Storage
 const storage = new CloudinaryStorage({
-  cloudinary,
+  cloudinary: cloudinary,
   params: {
     folder: "products", // Folder name in Cloudinary
-    format: async (req, file) => "png", // Convert all images to PNG
+    format: async (req, file) => "png", // supports promises as well
     public_id: (req, file) => file.originalname.split(".")[0], // Use file name as public_id
   },
 });
