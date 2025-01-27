@@ -54,7 +54,7 @@ const ProductCard = () => {
   }, [fetchProducts]);
 
   const getImageSrc = (product) => {
-    if (!product.image) return hero;
+    // if (!product.image) return hero;
 
     if (product.image instanceof File) {
       return URL.createObjectURL(product.image);

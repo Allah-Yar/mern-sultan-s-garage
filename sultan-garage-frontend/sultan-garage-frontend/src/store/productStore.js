@@ -30,7 +30,7 @@ export const useProductStore = create((set) => ({
   // Create Products
   createProduct: async (newProduct) => {
     // Validate required fields
-    if (!newProduct.name || !newProduct.image || !newProduct.price) {
+    if (!newProduct.name  || !newProduct.price) {
       return { success: false, message: "Please fill in all fields" };
     }
 

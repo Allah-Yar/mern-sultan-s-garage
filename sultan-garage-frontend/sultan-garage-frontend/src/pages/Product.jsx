@@ -51,7 +51,7 @@ const CreateProductDetails =  () => {
         setIsLoading(true);
     
         // Validate the form data
-        if (!productData.name || !productData.price || !productData.image) {
+        if (!productData.name || !productData.price ) {
           alert("Please fill in all fields and upload an image.");
           return;
         }
