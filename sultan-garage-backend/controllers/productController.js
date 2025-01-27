@@ -1,5 +1,5 @@
 import  Product from "../models/Product.js"
-import multer from "multer"
+
 import path from "path"
 import express from 'express'
 import multer from "multer";
