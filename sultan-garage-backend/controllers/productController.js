@@ -50,9 +50,10 @@ export const createProduct = [
     upload.single("image"),
     async(req, res) => {
     try {
-        console.log(req.body)
-        console.log(req.file)
-        if (!req.body.name ||  !req.body.price ||   !req.file) {
+      console.log("Request Body:", req.body);
+      console.log("Uploaded File:", req.file);
+
+        if (!req.body.name ||  !req.body.price  ) {
            return res.status(400).json({message: "Please fill in all fields", received: req.body,});} 
         const product =  {
             name: req.body.name,
@@ -65,7 +66,7 @@ export const createProduct = [
             // numReviews: req.body.numReviews,
             // countInStock: req.body.countInStock
         }
-         console.log(product)
+         console.log("product data", product)
         const newProduct = new Product(product);
         await newProduct.save();
         res.status(201).json({success: true, message:"Product created successfully", data: newProduct, product});
