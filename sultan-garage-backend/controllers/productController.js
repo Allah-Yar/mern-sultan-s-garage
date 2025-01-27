@@ -2,21 +2,47 @@ import  Product from "../models/Product.js"
 import multer from "multer"
 import path from "path"
 import express from 'express'
+import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import dotenv from "dotenv";
 
 const app = express()
+dotenv.config();
 
-// __dirname
-const __dirname = path.resolve();
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Configure Multer to Use Cloudinary Storage
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "products", // Folder name in Cloudinary
+    format: async (req, file) => "png", // Convert all images to PNG
+    public_id: (req, file) => file.originalname.split(".")[0], // Use file name as public_id
+  },
+});
+
+const upload = multer({ storage });
+
+
+
+// // __dirname
+// const __dirname = path.resolve();
 
 // app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => { cb(null, path.join(process.cwd(), "uploads/"));}, // Save files in the "uploads" folder
-    filename: (req, file, cb) => {
-      cb(null, `${Date.now()}-${file.originalname}`);
-    },
-  });
-  const upload = multer({ storage });
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => { cb(null, path.join(process.cwd(), "uploads/"));}, // Save files in the "uploads" folder
+//     filename: (req, file, cb) => {
+//       cb(null, `${Date.now()}-${file.originalname}`);
+//     },
+//   });
+//   const upload = multer({ storage });
 
   // Middleware to parse JSON and URL-encoded data
 app.use(express.json());
@@ -47,19 +73,21 @@ export const getProductById = async (req, res) => {
 }
 
 export const createProduct = [ 
-    // upload.single("image"),
+    upload.single("image"),
     async(req, res) => {
     try {
       console.log("Request Body:", req.body);
       console.log("Uploaded File:", req.file);
 
-        if (!req.body.name ||  !req.body.price  ) {
+        if (!req.body.name ||  !req.body.price  || !req.file) {
            return res.status(400).json({message: "Please fill in all fields", received: req.body,});} 
-        const product =  {
+         // Upload the image to Cloudinary
+      const result = await cloudinary.v2.uploader.upload(req.file.path);
+           const product =  {
             name: req.body.name,
             price: req.body.price,
             category: req.body.category,
-            // image: `/uploads/${req.file.filename}`, // Use the uploaded image path
+            image: result.secure_url,
             // description: req.body.description,
             
             // rating: req.body.rating,
@@ -92,7 +120,8 @@ export const updateProduct = [
   
         // If a new image is uploaded, update the image path
         if (req.file) {
-          updateData.image = `/uploads/${req.file.filename}`;
+            const result = await cloudinary.v2.uploader.upload(req.file.path);
+            updateData.image = result.secure_url;
         }
   
         const product = await Product.findByIdAndUpdate(

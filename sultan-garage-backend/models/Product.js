@@ -17,10 +17,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         
     },
-    // image: {
-    //     type: String,
-    //     // required: true
-    // },
+    image: {
+        type: String,
+        // required: true
+    },
     // rating: {
     //     type: Number,
     //     required: true
