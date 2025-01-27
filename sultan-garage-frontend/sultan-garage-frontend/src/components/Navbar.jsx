@@ -263,6 +263,15 @@ function ResponsiveAppBar() {
   return (
     <AppBar position="sticky">
       <Container maxWidth="xl">
+      <Typography sx={{
+  mr: 2,
+  color: 'red',  // Red color for text
+  fontSize: '2rem',  // Increase font size (adjust as needed)
+  textAlign: 'center',  // Center the text
+  fontWeight: 'bold',  // Make the text bold (optional)
+}}>
+  Warning! Dev in Progress.
+</Typography>
         <Toolbar disableGutters>
           {/* Logo and Brand Name */}
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
