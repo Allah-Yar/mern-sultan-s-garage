@@ -1,6 +1,7 @@
 import  Product from "../models/Product.js"
+import  cloudinary  from "cloudinary";
 import upload from "../config/upload.js"
-import { v2 as cloudinary } from "cloudinary";
+
 import path from "path"
 import express from 'express'
 
@@ -61,7 +62,7 @@ export const createProduct = [
         if (!req.body.name ||  !req.body.price  || !req.file) {
            return res.status(400).json({message: "Please fill in all fields", received: req.body,});} 
          // Upload the image to Cloudinary
-      const result = await cloudinary.v2.uploader.upload(req.file.path);
+      const result = await cloudinary.uploader.upload(req.file.path);
            const product =  {
             name: req.body.name,
             price: req.body.price,
