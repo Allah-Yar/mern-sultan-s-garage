@@ -62,7 +62,11 @@ export const createProduct = [
         if (!req.body.name ||  !req.body.price  || !req.file) {
            return res.status(400).json({message: "Please fill in all fields", received: req.body,});} 
          // Upload the image to Cloudinary
-      const result = await cloudinary.uploader.upload(req.file.path);
+      const result = await cloudinary.uploader.upload(req.file.path)
+      .catch((error) => {
+        console.log("Cloudinary upload error:", error);
+        return res.status(500).json({ message: "Cloudinary upload failed", error: error.message });
+    });
            const product =  {
             name: req.body.name,
             price: req.body.price,
