@@ -1,5 +1,6 @@
 import  Product from "../models/Product.js"
 import upload from "../config/upload.js"
+import { v2 as cloudinary } from "cloudinary";
 import path from "path"
 import express from 'express'
 
