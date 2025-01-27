@@ -1,33 +1,11 @@
 import  Product from "../models/Product.js"
-
+import upload from "../config/upload.js"
 import path from "path"
 import express from 'express'
-import multer from "multer";
-import cloudinary  from "cloudinary";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
-import dotenv from "dotenv";
+
 
 const app = express()
-dotenv.config();
 
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-// Configure Multer to Use Cloudinary Storage
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "products", // Folder name in Cloudinary
-    format: async (req, file) => "png", // supports promises as well
-    public_id: (req, file) => file.originalname.split(".")[0], // Use file name as public_id
-  },
-});
-
-const upload = multer({ storage });
 
 
 
