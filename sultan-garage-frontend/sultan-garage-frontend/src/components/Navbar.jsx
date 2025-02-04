@@ -1,6 +1,6 @@
   
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -15,15 +15,17 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+// import Signup from './Signup';
+// import Login from './Login';
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [authStatus, setAuthStatus] = useState({
-    isRegistered: false,
-    isLoggedIn: false
-  });
+  // const [authStatus, setAuthStatus] = useState({
+  //   isRegistered: false,
+  //   isLoggedIn: false
+  // });
 
    
 
@@ -40,20 +42,20 @@ function ResponsiveAppBar() {
   // }, []);
 
     // Use more secure auth check
-    useEffect(() => {
-      const checkLoginStatus = () => {
-        try {
-          const registered = localStorage.getItem('isRegistered') === 'true';
-          const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-          setAuthStatus({ isRegistered: registered, isLoggedIn: loggedIn });
-        } catch (error) {
-          console.error('Error checking auth status:', error);
-          setAuthStatus({ isRegistered: false, isLoggedIn: false });
-        }
-      };
+    // useEffect(() => {
+    //   const checkLoginStatus = () => {
+    //     try {
+    //       const registered = localStorage.getItem('isRegistered') === 'true';
+    //       const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    //       setAuthStatus({ isRegistered: registered, isLoggedIn: loggedIn });
+    //     } catch (error) {
+    //       console.error('Error checking auth status:', error);
+    //       setAuthStatus({ isRegistered: false, isLoggedIn: false });
+    //     }
+    //   };
   
-      checkLoginStatus();
-    }, []);
+    //   checkLoginStatus();
+    // }, []);
 
 
 
@@ -72,30 +74,30 @@ function ResponsiveAppBar() {
     //   }
     // }, []);
 
-    const handleRegister = useCallback(() => {
-      try {
-        localStorage.setItem('isRegistered', 'true');
-        setAuthStatus(prev => ({ ...prev, isRegistered: true }));
+    // const handleRegister = useCallback(() => {
+    //   try {
+    //     localStorage.setItem('isRegistered', 'true');
+    //     setAuthStatus(prev => ({ ...prev, isRegistered: true }));
         
-        // Force page refresh to reflect changes properly
-        window.location.reload();
-      } catch (error) {
-        console.error('Error during registration:', error);
-      }
-    }, []);
+    //     // Force page refresh to reflect changes properly
+    //     window.location.reload();
+    //   } catch (error) {
+    //     console.error('Error during registration:', error);
+    //   }
+    // }, []);
     
 
-  const handleLogin = () => {
-    localStorage.setItem('isLoggedIn', 'true');
-    setAuthStatus(prev => ({ ...prev, isLoggedIn: true }));
-  };
+  // const handleLogin = () => {
+  //   localStorage.setItem('isLoggedIn', 'true');
+  //   setAuthStatus(prev => ({ ...prev, isLoggedIn: true }));
+  // };
 
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    // localStorage.removeItem('isRegistered');
-    setAuthStatus({  isLoggedIn: false });
-    navigate('/');
-  };
+  // const handleLogout = () => {
+  //   localStorage.removeItem('isLoggedIn');
+  //   // localStorage.removeItem('isRegistered');
+  //   setAuthStatus({  isLoggedIn: false });
+  //   navigate('/');
+  // };
 
   const handleNavClick = (path) => {
     navigate(path);
@@ -164,59 +166,59 @@ function ResponsiveAppBar() {
   //   }
   // };
 
-  const getAuthButton = () => {
-    if (authStatus.isLoggedIn) {
-      return (
-        <>
-          <Button
-            href="https://sultan-garage-production.up.railway.app/dashboard"
-            variant="contained"
-            color="success"
-            size="large"
-            sx={{ mx: 2 }}
-          >
-            Dashboard
-          </Button>
-          <Button
-            onClick={handleLogout}
-            variant="contained"
-            color="error"
-            size="large"
-            sx={{ mx: 2 }}
-          >
-            Logout
-          </Button>
-        </>
-      );
-    } 
+  // const getAuthButton = () => {
+  //   if (authStatus.isLoggedIn) {
+  //     return (
+  //       <>
+  //         <Button
+  //           href="https://sultan-garage-production.up.railway.app/dashboard"
+  //           variant="contained"
+  //           color="success"
+  //           size="large"
+  //           sx={{ mx: 2 }}
+  //         >
+  //           Dashboard
+  //         </Button>
+  //         <Button
+  //           onClick={handleLogout}
+  //           variant="contained"
+  //           color="error"
+  //           size="large"
+  //           sx={{ mx: 2 }}
+  //         >
+  //           Logout
+  //         </Button>
+  //       </>
+  //     );
+  //   } 
   
-    if (!authStatus.isRegistered) {
-      return (
-        <Button
-          onClick={handleRegister}
-          variant="contained"
-          color="secondary"
-          size="large"
-          sx={{ mx: 2 }}
-        >
-          Register
-        </Button>
-      );
-    }
+  //   if (!authStatus.isRegistered) {
+  //     return (
+  //       <Button
+  //         onClick={handleRegister}
+  //         variant="contained"
+  //         color="secondary"
+  //         size="large"
+  //         sx={{ mx: 2 }}
+  //       >
+  //         Register
+  //       </Button>
+  //     );
+  //   }
   
-    return (
-      <Button
-        href="https://sultan-garage-production.up.railway.app/login"
-        onClick={handleLogin}
-        variant="contained"
-        color="primary"
-        size="large"
-        sx={{ mx: 2 }}
-      >
-        Login
-      </Button>
-    );
-  };
+  //   return (
+  //     <Button
+  //       href="https://sultan-garage-production.up.railway.app/login"
+  //       onClick={handleLogin}
+  //       variant="contained"
+  //       color="primary"
+  //       size="large"
+  //       sx={{ mx: 2 }}
+  //     >
+  //       Login
+  //     </Button>
+  //   );
+  // };
 
   // const getAuthButton = () => {
   //   if (authStatus.isLoggedIn) {
@@ -412,7 +414,13 @@ function ResponsiveAppBar() {
               onClose={() => setAnchorElUser(null)}
             >
               <MenuItem>
-                { getAuthButton() }
+              <Button onClick={() => handleNavClick('/signup')} sx={{ my: 2, color: 'black', display: 'block' }}>
+               Signup
+             </Button>
+              <Button onClick={() => handleNavClick('/login')} sx={{ my: 2, color: 'black', display: 'block' }}>
+               Login
+             </Button>
+
               </MenuItem>
             </Menu>
           </Box>

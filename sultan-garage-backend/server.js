@@ -13,6 +13,8 @@ import findOrCreate from 'mongoose-findorcreate';
 // import passport from './config/passportConfig.js';
 import  productRoutes from './routes/productRoutes.js';
 // import authRoutes from './routes/authRoutes.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import morgan from 'morgan';
 import compression from 'compression';
 import cors from 'cors';
@@ -24,7 +26,7 @@ dotenv.config();
 
 const app = express();
 app.use(express.static("public"));
-app.set('view engine', 'ejs');
+// app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 const PORT = process.env.PORT || 3000;
 db();
@@ -44,75 +46,127 @@ app.use(compression());
 
 
 
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { 
-      secure: process.env.NODE_ENV
-      }
-}));
+// app.use(session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: { 
+//       secure: process.env.NODE_ENV
+//       }
+// }));
 
-// Passport Middleware
-app.use(passport.initialize());
-app.use(passport.session());
+// // Passport Middleware
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-const userSchema = new mongoose.Schema({
-  username: { type: String, required: true },
+const adminSchema = new mongoose.Schema({
+  // username: { type: String, required: true },
+  // email: { type: String, required: true, unique: true },
+  // password: String,
+  // googleId: String,
   email: { type: String, required: true, unique: true },
-  password: String,
-  googleId: String,
+  password: { type: String, required: true }
   // secret: String
 });
 
-userSchema.methods.comparePassword = async function(candidatePassword) {
+// userSchema.methods.comparePassword = async function(candidatePassword) {
+//   try {
+//     // Using passport-local-mongoose's built-in verify method
+//     const isValid = await this.authenticate(candidatePassword);
+//     return isValid;
+//   } catch (error) {
+//     return false;
+//   }
+// };
+
+// userSchema.plugin(passportLocalMongoose);
+// userSchema.plugin(findOrCreate);
+
+const Admin = new mongoose.model("Admin", adminSchema);
+// passport.use(User.createStrategy());
+
+// passport.serializeUser(function(user, cb) {
+//   process.nextTick(function() {
+//     cb(null, { id: user.id, username: user.username });
+//   });
+// });
+
+// passport.deserializeUser(function(user, cb) {
+//   process.nextTick(function() {
+//     return cb(null, user);
+//   });
+// });
+
+// Signup route
+app.post('/api/signup', async (req, res) => {
+  const { email, password } = req.body;
   try {
-    // Using passport-local-mongoose's built-in verify method
-    const isValid = await this.authenticate(candidatePassword);
-    return isValid;
-  } catch (error) {
-    return false;
+    // Check if an admin already exists
+    const existingAdmin = await Admin.findOne();
+    if (existingAdmin) {
+      return res.status(400).json({ error: 'Only one admin is allowed' });
+    }
+
+    // Hash the password and create the admin
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const admin = new Admin({ email, password: hashedPassword });
+    await admin.save();
+    res.status(201).json({ message: 'Admin created successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error creating admin' });
   }
-};
-
-userSchema.plugin(passportLocalMongoose);
-userSchema.plugin(findOrCreate);
-
-const User = new mongoose.model("User", userSchema);
-passport.use(User.createStrategy());
-
-passport.serializeUser(function(user, cb) {
-  process.nextTick(function() {
-    cb(null, { id: user.id, username: user.username });
-  });
-});
-
-passport.deserializeUser(function(user, cb) {
-  process.nextTick(function() {
-    return cb(null, user);
-  });
 });
 
 
 
+// Login route
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const admin = await Admin.findOne({ email });
+    if (!admin) return res.status(400).json({ error: 'Admin not found' });
 
-// Update Google Strategy implementation
-passport.use(new GoogleStrategy({
-  clientID: process.env.GOOGLE_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: process.env.GOOGLE_CALLBACK_URL ,
-},
-function(accessToken, refreshToken, profile, done) {
-  User.findOrCreate({ 
-    googleId: profile.id 
-  }, {
-    username: profile.displayName || profile.emails[0].value.split('@')[0],
-    email: profile.emails[0].value,
-    googleId: profile.id
-  }, function (err, user) {
-    return done(err, user);
-  });
-}));
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
+
+    const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token });
+  } catch (err) {
+    res.status(500).json({ error: 'Error logging in' });
+  }
+});
+
+app.get('/api/check-admin', async (req, res) => {
+  try {
+    const admin = await Admin.findOne();
+    if (admin) {
+      return res.json({ adminExists: true });
+    } else {
+      return res.json({ adminExists: false });
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Error checking admin status' });
+  }
+});
+
+
+// // Update Google Strategy implementation
+// passport.use(new GoogleStrategy({
+//   clientID: process.env.GOOGLE_CLIENT_ID,
+//   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+//   callbackURL: process.env.GOOGLE_CALLBACK_URL ,
+// },
+// function(accessToken, refreshToken, profile, done) {
+//   User.findOrCreate({ 
+//     googleId: profile.id 
+//   }, {
+//     username: profile.displayName || profile.emails[0].value.split('@')[0],
+//     email: profile.emails[0].value,
+//     googleId: profile.id
+//   }, function (err, user) {
+//     return done(err, user);
+//   });
+// }));
 
 // // Passport Local Strategy for login
 // passport.use(new LocalStrategy({
@@ -152,95 +206,95 @@ function(accessToken, refreshToken, profile, done) {
 //   }
 // ));
 // Add error handling middleware before your routes
-app.use((error, req, res, next) => {
-  if (error.name === 'ValidationError') {
-    const messages = Object.values(error.errors).map(err => err.message);
-    req.flash('error_msg', messages.join(', '));
-    return res.redirect('/register');
-  }
-  next(error);
-});
+// app.use((error, req, res, next) => {
+//   if (error.name === 'ValidationError') {
+//     const messages = Object.values(error.errors).map(err => err.message);
+//     req.flash('error_msg', messages.join(', '));
+//     return res.redirect('/register');
+//   }
+//   next(error);
+// });
 
-app.get("/", (req, res) => {
-  res.render("home");
-});
+// app.get("/", (req, res) => {
+//   res.render("home");
+// });
 
-app.get("/auth/google",
-  passport.authenticate('google', { scope: [ "profile", "email" ] })
-);
+// app.get("/auth/google",
+//   passport.authenticate('google', { scope: [ "profile", "email" ] })
+// );
 
-app.get( "/auth/google/dashboard",
-  passport.authenticate( 'google', {
-      successRedirect: "/dashboard",
-      failureRedirect: "/login"
-}));
+// app.get( "/auth/google/dashboard",
+//   passport.authenticate( 'google', {
+//       successRedirect: "/dashboard",
+//       failureRedirect: "/login"
+// }));
 
-app.post("/login", passport.authenticate("local", {
-  successRedirect: "/dashboard",
-  failureRedirect: "/login",
+// app.post("/login", passport.authenticate("local", {
+//   successRedirect: "/dashboard",
+//   failureRedirect: "/login",
   
-}), (req, res) => {
+// }), (req, res) => {
  
-  res.redirect('/login');
-});
+//   res.redirect('/login');
+// });
 
-app.get("/login", (req, res) => {
-  res.render("login");
-})
+// app.get("/login", (req, res) => {
+//   res.render("login");
+// })
 
-app.get("/register", (req, res) => {
-  res.render("register");
-})
+// app.get("/register", (req, res) => {
+//   res.render("register");
+// })
 
-app.get("/dashboard", async (req, res, next) => {
-  try {
-    const foundUsers = await User.find({});
-    if (foundUsers) {
-      res.render("dashboard");
-    } else {
-      res.status(404).send("Cannot operate");
-    }
-  } catch (error) {
-    next(error); // Pass the error to the next error handler
-  }
-});
+// app.get("/dashboard", async (req, res, next) => {
+//   try {
+//     const foundUsers = await User.find({});
+//     if (foundUsers) {
+//       res.render("dashboard");
+//     } else {
+//       res.status(404).send("Cannot operate");
+//     }
+//   } catch (error) {
+//     next(error); // Pass the error to the next error handler
+//   }
+// });
 
 
-app.get("/logout", (req, res) => {
-  req.logout( (err) => {
-      if (err) {
-          console.log(err);
-          return res.redirect("/dashboard")
-      } else {
-          res.redirect("/");
-      }
-  });
+// app.get("/logout", (req, res) => {
+//   req.logout( (err) => {
+//       if (err) {
+//           console.log(err);
+//           return res.redirect("/dashboard")
+//       } else {
+//           res.redirect("/");
+//       }
+//   });
   
-});
+// });
 
 
 
-app.post("/register", async (req, res) => {
-  try {
-    const newUser = await User.register(
-      new User({ username: req.body.username, email: req.body.email }),
-      req.body.password
-    );
-    req.login(newUser, (err) => {
-      if (err) {
+// app.post("/register", async (req, res) => {
+//   try {
+//     const newUser = await User.register(
+//       new User({ username: req.body.username, email: req.body.email }),
+//       req.body.password
+//     );
+//     req.login(newUser, (err) => {
+//       if (err) {
     
-        return res.redirect("/register");
-      }
-      passport.authenticate("local")(req, res, () => {
+//         return res.redirect("/register");
+//       }
+//       passport.authenticate("local")(req, res, () => {
       
-        return res.redirect("/login");
-      });
-    });
-  } catch (error) {
+//         return res.redirect("/login");
+//       });
+//     });
+//   } catch (error) {
    
-    res.redirect("/register");
-  }
-});
+//     res.redirect("/register");
+//   }
+// });
 
 
 

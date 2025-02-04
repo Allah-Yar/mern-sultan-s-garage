@@ -1,62 +1,77 @@
-import { Typography, Button, Container,  Box, 
-    Card, 
-    CardContent, 
-     } from '@mui/material';
-    import { 
-  Dashboard as DashboardIcon, 
-  Logout as LogoutIcon 
-} from '@mui/icons-material';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { 
+  Container,
+  Box,
+  Typography,
+  Button,
+  CssBaseline
+} from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+const defaultTheme = createTheme();
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
+  // Check if user is authenticated
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   const handleLogout = () => {
-    // Clear session or token and redirect to login
-    window.location.href = '/';
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+  const handleHome = () => {
+    navigate('/products');
   };
 
   return (
-  
-    <Container maxWidth="lg">
-         <Box sx={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center', 
-            mt: 4 
-          }}>
-            <Card sx={{ width: '100%', maxWidth: 600 }}>
-              <CardContent>
-                <Box sx={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center',
-                  mb: 3 
-                }}>
-                  <Typography 
-                    variant="h4" 
-                    component="h1" 
-                    sx={{ display: 'flex', alignItems: 'center' }}
-                  >
-                    <DashboardIcon sx={{ mr: 2 }} />
-                    Admin Dashboard
-                  </Typography>
-                  <Button 
-                    variant="contained" 
-                    color="secondary" 
-                    onClick={handleLogout}
-                    startIcon={<LogoutIcon />}
-                  >
-                    Logout
-                  </Button>
-                </Box>
-    
-                
-                
-              </CardContent>
-            </Card>
+    <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 3
+          }}
+        >
+          <Typography variant="h5" component="h1">
+            Admin Dashboard
+          </Typography>
+          
+          <Typography variant="body1">
+            Welcome to your admin panel!
+          </Typography>
+
+          <Box sx={{ display: 'flex', gap: 2, mt: 4 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleHome}
+            >
+              Home
+            </Button>
+            
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
           </Box>
-        
-        </Container>
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 };
 
