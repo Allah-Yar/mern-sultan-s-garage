@@ -1,6 +1,6 @@
   
 
-import { useState} from 'react';
+import {  useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -15,8 +15,10 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import {Link} from '@mui/material';
 // import Signup from './Signup';
 // import Login from './Login';
+
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
@@ -26,78 +28,14 @@ function ResponsiveAppBar() {
   //   isRegistered: false,
   //   isLoggedIn: false
   // });
-
-   
-
-  // Check if user is already logged in on component mount
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);  
   // useEffect(() => {
-  //   const checkLoginStatus = () => {
-  //     // Check localStorage or sessionStorage for auth status
-  //     const registered = localStorage.getItem('isRegistered') === 'true';
-  //     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  //     setAuthStatus({ isRegistered: registered, isLoggedIn: loggedIn });
-  //   };
-
-  //   checkLoginStatus();
+  //   // Check if token exists in localStorage
+  //   const token = localStorage.getItem('token');
+  //   setIsAuthenticated(!token);
   // }, []);
 
-    // Use more secure auth check
-    // useEffect(() => {
-    //   const checkLoginStatus = () => {
-    //     try {
-    //       const registered = localStorage.getItem('isRegistered') === 'true';
-    //       const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    //       setAuthStatus({ isRegistered: registered, isLoggedIn: loggedIn });
-    //     } catch (error) {
-    //       console.error('Error checking auth status:', error);
-    //       setAuthStatus({ isRegistered: false, isLoggedIn: false });
-    //     }
-    //   };
-  
-    //   checkLoginStatus();
-    // }, []);
 
-
-
-  // const handleRegister = () => {
-  //   localStorage.setItem('isRegistered', 'true');
-  //   setAuthStatus(prev => ({ ...prev, isRegistered: true }));
-  // };
-
-    // Improve button handlers with error handling
-    // const handleRegister = useCallback(() => {
-    //   try {
-    //     localStorage.setItem('isRegistered', 'true');
-    //     setAuthStatus(prev => ({ ...prev, isRegistered: true }));
-    //   } catch (error) {
-    //     console.error('Error during registration:', error);
-    //   }
-    // }, []);
-
-    // const handleRegister = useCallback(() => {
-    //   try {
-    //     localStorage.setItem('isRegistered', 'true');
-    //     setAuthStatus(prev => ({ ...prev, isRegistered: true }));
-        
-    //     // Force page refresh to reflect changes properly
-    //     window.location.reload();
-    //   } catch (error) {
-    //     console.error('Error during registration:', error);
-    //   }
-    // }, []);
-    
-
-  // const handleLogin = () => {
-  //   localStorage.setItem('isLoggedIn', 'true');
-  //   setAuthStatus(prev => ({ ...prev, isLoggedIn: true }));
-  // };
-
-  // const handleLogout = () => {
-  //   localStorage.removeItem('isLoggedIn');
-  //   // localStorage.removeItem('isRegistered');
-  //   setAuthStatus({  isLoggedIn: false });
-  //   navigate('/');
-  // };
 
   const handleNavClick = (path) => {
     navigate(path);
@@ -113,153 +51,7 @@ function ResponsiveAppBar() {
     setAnchorElUser(event.currentTarget);
   };
 
-  // const getAuthButton = () => {
-  //   if (authStatus.isLoggedIn) {
-  //     return (
-  //       <>
-  //         <Button
-  //           href="http://localhost:3000/dashboard"
-  //           variant="contained"
-  //           color="success"
-  //           size="large"
-  //           sx={{ mx: 2 }}
-  //         >
-  //           Dashboard
-  //         </Button>
-  //         <Button
-  //           onClick={handleLogout}
-  //           variant="contained"
-  //           color="error"
-  //           size="large"
-  //           sx={{ mx: 2 }}
-  //         >
-  //           Logout
-  //         </Button>
-  //       </>
-  //     );
-  //   } else if (authStatus.isRegistered) {
-  //     return (
-  //       <Button
-  //         href="http://localhost:3000/login"
-  //         onClick={handleLogin}
-  //         variant="contained"
-  //         color="primary"
-  //         size="large"
-  //         sx={{ mx: 2 }}
-  //       >
-  //         Login
-  //       </Button>
-  //     );
-  //   } else {
-  //     return (
-  //       <Button
-  //         // href="http://localhost:3000/register"
-  //         onClick={handleRegister}
-  //         variant="contained"
-  //         color="secondary"
-  //         size="large"
-  //         sx={{ mx: 2 }}
-  //       >
-  //         Register
-  //       </Button>
-  //     );
-  //   }
-  // };
 
-  // const getAuthButton = () => {
-  //   if (authStatus.isLoggedIn) {
-  //     return (
-  //       <>
-  //         <Button
-  //           href="https://sultan-garage-production.up.railway.app/dashboard"
-  //           variant="contained"
-  //           color="success"
-  //           size="large"
-  //           sx={{ mx: 2 }}
-  //         >
-  //           Dashboard
-  //         </Button>
-  //         <Button
-  //           onClick={handleLogout}
-  //           variant="contained"
-  //           color="error"
-  //           size="large"
-  //           sx={{ mx: 2 }}
-  //         >
-  //           Logout
-  //         </Button>
-  //       </>
-  //     );
-  //   } 
-  
-  //   if (!authStatus.isRegistered) {
-  //     return (
-  //       <Button
-  //         onClick={handleRegister}
-  //         variant="contained"
-  //         color="secondary"
-  //         size="large"
-  //         sx={{ mx: 2 }}
-  //       >
-  //         Register
-  //       </Button>
-  //     );
-  //   }
-  
-  //   return (
-  //     <Button
-  //       href="https://sultan-garage-production.up.railway.app/login"
-  //       onClick={handleLogin}
-  //       variant="contained"
-  //       color="primary"
-  //       size="large"
-  //       sx={{ mx: 2 }}
-  //     >
-  //       Login
-  //     </Button>
-  //   );
-  // };
-
-  // const getAuthButton = () => {
-  //   if (authStatus.isLoggedIn) {
-  //     return (
-  //       <>
-  //         <Button
-  //           href="http://localhost:3000/dashboard"
-  //           variant="contained"
-  //           color="success"
-  //           size="large"
-  //           sx={{ mx: 2 }}
-  //         >
-  //           Dashboard
-  //         </Button>
-  //         <Button
-  //           onClick={handleLogout}
-  //           variant="contained"
-  //           color="error"
-  //           size="large"
-  //           sx={{ mx: 2 }}
-  //         >
-  //           Logout
-  //         </Button>
-  //       </>
-  //     );
-  //   } 
-    
-  //   // Show register only if the user is not logged in
-  //   return (
-  //     <Button
-  //       href="http://localhost:3000/register"
-  //       onClick={handleRegister}
-  //       variant="contained"
-  //       color="secondary"
-  //       size="large"
-  //       sx={{ mx: 2 }}
-  //     >
-  //       {authStatus.isRegistered ? "Login" : "Register"}
-  //     </Button>
-  //   );
-  // };
   
 
   return (
@@ -413,13 +205,19 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={() => setAnchorElUser(null)}
             >
+
               <MenuItem>
-              <Button onClick={() => handleNavClick('/signup')} sx={{ my: 2, color: 'black', display: 'block' }}>
+              
+              <Button><Link href='/dashboard'>Dashboard</Link></Button>
+            <Button onClick={() => handleNavClick('/signup')} sx={{ my: 2, color: 'black', display: 'block' }}>
                Signup
              </Button>
               <Button onClick={() => handleNavClick('/login')} sx={{ my: 2, color: 'black', display: 'block' }}>
                Login
              </Button>
+        
+     
+             
 
               </MenuItem>
             </Menu>

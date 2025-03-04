@@ -30,9 +30,12 @@ const Signup = () => {
     setError('');
 
     try {
-      await axios.post('http://localhost:3000/api/signup', { 
+      await axios.post('https://sultan-garage-production.up.railway.app/api/signup', { 
+        
         email, 
         password 
+      }, {
+        headers: { 'Content-Type': 'application/json' }
       });
       alert('Admin created successfully');
       navigate('/login'); // Redirect to login after successful signup

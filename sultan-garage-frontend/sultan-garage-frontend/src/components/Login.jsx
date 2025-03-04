@@ -59,13 +59,23 @@ const Login = () => {
     setError('');
 
     try {
-      const res = await axios.post('http://localhost:3000/api/login', { 
+      const res = await axios.post('https://sultan-garage-production.up.railway.app/api/login', { 
         email, 
         password 
+      }, {
+        headers: { 'Content-Type': 'application/json' }
       });
       
-      localStorage.setItem('token', res.data.token);
-      navigate('/dashboard'); // Redirect to dashboard after login
+      // Access response data correctly
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+        navigate('/dashboard', { replace: true }); // Redirect to dashboard
+        window.location.reload(); // Force a refresh to update UI
+      }
+      
+      // localStorage.setItem('token', res.data.token);
+      // navigate('/dashboard'); // Redirect to dashboard after login
+      // window.location.reload();
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed. Please try again.');
       setLoading(false);

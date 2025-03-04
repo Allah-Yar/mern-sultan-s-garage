@@ -46,18 +46,7 @@ app.use(compression());
 
 
 
-// app.use(session({
-//     secret: process.env.SESSION_SECRET,
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: { 
-//       secure: process.env.NODE_ENV
-//       }
-// }));
 
-// // Passport Middleware
-// app.use(passport.initialize());
-// app.use(passport.session());
 
 const adminSchema = new mongoose.Schema({
   // username: { type: String, required: true },
@@ -69,33 +58,10 @@ const adminSchema = new mongoose.Schema({
   // secret: String
 });
 
-// userSchema.methods.comparePassword = async function(candidatePassword) {
-//   try {
-//     // Using passport-local-mongoose's built-in verify method
-//     const isValid = await this.authenticate(candidatePassword);
-//     return isValid;
-//   } catch (error) {
-//     return false;
-//   }
-// };
 
-// userSchema.plugin(passportLocalMongoose);
-// userSchema.plugin(findOrCreate);
 
 const Admin = new mongoose.model("Admin", adminSchema);
-// passport.use(User.createStrategy());
 
-// passport.serializeUser(function(user, cb) {
-//   process.nextTick(function() {
-//     cb(null, { id: user.id, username: user.username });
-//   });
-// });
-
-// passport.deserializeUser(function(user, cb) {
-//   process.nextTick(function() {
-//     return cb(null, user);
-//   });
-// });
 
 // Signup route
 app.post('/api/signup', async (req, res) => {
@@ -148,176 +114,6 @@ app.get('/api/check-admin', async (req, res) => {
     res.status(500).json({ error: 'Error checking admin status' });
   }
 });
-
-
-// // Update Google Strategy implementation
-// passport.use(new GoogleStrategy({
-//   clientID: process.env.GOOGLE_CLIENT_ID,
-//   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//   callbackURL: process.env.GOOGLE_CALLBACK_URL ,
-// },
-// function(accessToken, refreshToken, profile, done) {
-//   User.findOrCreate({ 
-//     googleId: profile.id 
-//   }, {
-//     username: profile.displayName || profile.emails[0].value.split('@')[0],
-//     email: profile.emails[0].value,
-//     googleId: profile.id
-//   }, function (err, user) {
-//     return done(err, user);
-//   });
-// }));
-
-// // Passport Local Strategy for login
-// passport.use(new LocalStrategy({
-//   usernameField: 'username',
-//   passwordField: 'password',
-// }, async (username, password, done) => {
-//   try {
-//     const user = await User.findOne({ username });  // Adjust this based on your user model
-//     if (!user) return done(null, false, { message: 'Invalid credentials.' });
-
-//     const isMatch = await user.comparePassword(password); // Assuming you have a method to compare passwords
-//     if (!isMatch) return done(null, false, { message: 'Invalid credentials.' });
-
-//     return done(null, user); // Successfully authenticated
-//   } catch (err) {
-//     return done(err);
-//   }
-// }));
-// Update the Local Strategy implementation
-// passport.use(new LocalStrategy(
-//   async (username, password, done) => {
-//     try {
-//       const user = await User.findOne({ username });
-//       if (!user) {
-//         return done(null, false, { message: 'Invalid username' });
-//       }
-      
-//       const isValid = await user.authenticate(password);
-//       if (!isValid) {
-//         return done(null, false, { message: 'Invalid password' });
-//       }
-
-//       return done(null, user);
-//     } catch (err) {
-//       return done(err);
-//     }
-//   }
-// ));
-// Add error handling middleware before your routes
-// app.use((error, req, res, next) => {
-//   if (error.name === 'ValidationError') {
-//     const messages = Object.values(error.errors).map(err => err.message);
-//     req.flash('error_msg', messages.join(', '));
-//     return res.redirect('/register');
-//   }
-//   next(error);
-// });
-
-// app.get("/", (req, res) => {
-//   res.render("home");
-// });
-
-// app.get("/auth/google",
-//   passport.authenticate('google', { scope: [ "profile", "email" ] })
-// );
-
-// app.get( "/auth/google/dashboard",
-//   passport.authenticate( 'google', {
-//       successRedirect: "/dashboard",
-//       failureRedirect: "/login"
-// }));
-
-// app.post("/login", passport.authenticate("local", {
-//   successRedirect: "/dashboard",
-//   failureRedirect: "/login",
-  
-// }), (req, res) => {
- 
-//   res.redirect('/login');
-// });
-
-// app.get("/login", (req, res) => {
-//   res.render("login");
-// })
-
-// app.get("/register", (req, res) => {
-//   res.render("register");
-// })
-
-// app.get("/dashboard", async (req, res, next) => {
-//   try {
-//     const foundUsers = await User.find({});
-//     if (foundUsers) {
-//       res.render("dashboard");
-//     } else {
-//       res.status(404).send("Cannot operate");
-//     }
-//   } catch (error) {
-//     next(error); // Pass the error to the next error handler
-//   }
-// });
-
-
-// app.get("/logout", (req, res) => {
-//   req.logout( (err) => {
-//       if (err) {
-//           console.log(err);
-//           return res.redirect("/dashboard")
-//       } else {
-//           res.redirect("/");
-//       }
-//   });
-  
-// });
-
-
-
-// app.post("/register", async (req, res) => {
-//   try {
-//     const newUser = await User.register(
-//       new User({ username: req.body.username, email: req.body.email }),
-//       req.body.password
-//     );
-//     req.login(newUser, (err) => {
-//       if (err) {
-    
-//         return res.redirect("/register");
-//       }
-//       passport.authenticate("local")(req, res, () => {
-      
-//         return res.redirect("/login");
-//       });
-//     });
-//   } catch (error) {
-   
-//     res.redirect("/register");
-//   }
-// });
-
-
-
-
-// app.post("/login", async(req, res) => {
-//   const user = new User({
-//       username: req.body.email,
-//       password: req.body.password
-//   });
-//   req.login(user, (err) => {
-//       if (err) {
-//           console.log(err);
-//       } else {
-//           passport.authenticate("local")(req, res, () => {
-//               res.redirect("/dashboard");
-//           })
-//       }
-//   })
-// })
-
-
-
-
 
 
 

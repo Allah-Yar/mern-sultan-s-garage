@@ -7,9 +7,9 @@ import {
   Button,
   CssBaseline
 } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+// import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const defaultTheme = createTheme();
+// const defaultTheme = createTheme();
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -25,14 +25,16 @@ const Dashboard = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
+    window.location.reload();
   };
 
-  const handleHome = () => {
-    navigate('/products');
-  };
+  // const handleHome = () => {
+  //   navigate('/');
+  //   window.location.reload();
+  // };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    // <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -53,13 +55,13 @@ const Dashboard = () => {
           </Typography>
 
           <Box sx={{ display: 'flex', gap: 2, mt: 4 }}>
-            <Button
+            {/* <Button
               variant="contained"
               color="primary"
               onClick={handleHome}
             >
               Home
-            </Button>
+            </Button> */}
             
             <Button
               variant="outlined"
@@ -71,7 +73,7 @@ const Dashboard = () => {
           </Box>
         </Box>
       </Container>
-    </ThemeProvider>
+    // </ThemeProvider>
   );
 };
 
