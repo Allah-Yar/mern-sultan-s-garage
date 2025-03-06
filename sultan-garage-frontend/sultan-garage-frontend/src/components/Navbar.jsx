@@ -219,7 +219,7 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={() => setAnchorElUser(null)}
             >
-              <MenuItem>
+              {/* <MenuItem>
 
           <Typography
             variant="h3"
@@ -283,7 +283,73 @@ function ResponsiveAppBar() {
             )}
           </Box>
        
-          </MenuItem>
+          </MenuItem> */}
+
+<MenuItem sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
+  <Typography
+    variant="h3"
+    component="h2"
+    gutterBottom
+    sx={{
+      fontWeight: 'bold',
+      color: 'primary.main',
+      mb: 2,
+      mt: 1,
+      p: 2,
+      textAlign: 'center',
+      fontSize: { xs: '1.5rem', sm: '2rem', md: '3rem' }, // Adjusts based on screen size
+    }}
+  >
+    Welcome Admin
+  </Typography>
+
+  <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+    {isLoggedIn ? (
+      <Button
+        variant="contained"
+        color="primary"
+        startIcon={<DashboardIcon />}
+        component={Link}
+        to="/dashboard"
+        sx={{
+          py: { xs: 1, sm: 1.5 }, // Adjusts padding for small and larger screens
+          px: { xs: 3, sm: 4 },
+          textTransform: 'none',
+          fontSize: { xs: '0.875rem', sm: '1rem' },
+          width: { xs: '90%', sm: 'auto' }, // Full width on small screens, auto on larger
+          '&:hover': {
+            bgcolor: 'primary.dark',
+          },
+        }}
+        onClick={() => setAnchorElUser(null)}
+      >
+        Dashboard
+      </Button>
+    ) : (
+      <Button
+        variant="contained"
+        color="primary"
+        startIcon={<LoginIcon />}
+        component={Link}
+        to="/login"
+        sx={{
+          py: { xs: 1, sm: 1.5 },
+          px: { xs: 3, sm: 4 },
+          textTransform: 'none',
+          fontSize: { xs: '0.875rem', sm: '1rem' },
+          width: { xs: '90%', sm: 'auto' },
+          '&:hover': {
+            bgcolor: 'primary.dark',
+          },
+        }}
+        onClick={() => setAnchorElUser(null)}
+      >
+        Login
+      </Button>
+    )}
+  </Box>
+</MenuItem>
+
             </Menu>
           </Box>
         </Toolbar>
