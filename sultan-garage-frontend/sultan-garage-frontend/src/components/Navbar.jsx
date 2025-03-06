@@ -1,7 +1,7 @@
   
 
-import {  useState} from 'react';
-import { useNavigate } from 'react-router-dom';
+import {  useState, useEffect} from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,9 +15,14 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import {Link} from '@mui/material';
+// import {Link} from '@mui/material';
 // import Signup from './Signup';
 // import Login from './Login';
+// import {  useNavigate } from "react-router-dom";
+// import CssBaseline from '@mui/material';
+// import Paper from '@mui/material';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import LoginIcon from '@mui/icons-material/Login';
 
 
 function ResponsiveAppBar() {
@@ -35,12 +40,21 @@ function ResponsiveAppBar() {
   //   setIsAuthenticated(!token);
   // }, []);
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const handleNavClick = (path) => {
     navigate(path);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setAnchorElNav(null);
+    window.location.reload();
   };
 
   const handleOpenNavMenu = (event) => {
@@ -129,11 +143,11 @@ function ResponsiveAppBar() {
                <MenuItem onClick={() => handleNavClick('/services')}>
                  <Typography sx={{ textAlign: 'center' }}>Services</Typography>
                </MenuItem>
-               {/* {authStatus.isLoggedIn ? */}
+               {isLoggedIn ?
                <MenuItem onClick={() => handleNavClick('/create')}>
                  <Typography sx={{ textAlign: 'center' }}>Create Product</Typography>
                </MenuItem> 
-               {/* } */}
+                : ''} 
                <MenuItem onClick={() => handleNavClick('/products')}>
                  <Typography sx={{ textAlign: 'center' }}>Products</Typography>
                </MenuItem>
@@ -174,11 +188,11 @@ function ResponsiveAppBar() {
               <Button onClick={() => handleNavClick('/services')} sx={{ my: 2, color: 'white', display: 'block' }}>
                Services
              </Button>
-             {/* {authStatus.isLoggedIn ?  */}
+             {isLoggedIn ? 
              <Button onClick={() => handleNavClick('/create')} sx={{ my: 2, color: 'white', display: 'block' }}>
                Create Product
              </Button> 
-             {/* } */}
+             : ''}
              <Button onClick={() => handleNavClick('/products')} sx={{ my: 2, color: 'white', display: 'block' }}>
                Products
              </Button>
@@ -205,21 +219,71 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={() => setAnchorElUser(null)}
             >
-
               <MenuItem>
-              
-              <Button><Link href='/dashboard'>Dashboard</Link></Button>
-            <Button onClick={() => handleNavClick('/signup')} sx={{ my: 2, color: 'black', display: 'block' }}>
-               Signup
-             </Button>
-              <Button onClick={() => handleNavClick('/login')} sx={{ my: 2, color: 'black', display: 'block' }}>
-               Login
-             </Button>
-        
-     
-             
 
-              </MenuItem>
+          <Typography
+            variant="h3"
+            component="h2"
+            gutterBottom
+            sx={{
+              fontWeight: 'bold',
+              color: 'primary.main',
+              mb: 2,
+              mt:1,
+              p:2,
+              fontSize: { xs: '2rem', sm: '3rem' }
+            }}
+          >
+            Welcome Admin
+          </Typography>
+
+        
+
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            {isLoggedIn ? (
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<DashboardIcon />}
+                component={Link}
+                to="/dashboard"
+                sx={{
+                  py: 1.5,
+                  px: 4,
+                  textTransform: 'none',
+                  fontSize: '1rem',
+                  '&:hover': {
+                    bgcolor: 'primary.dark'
+                  }
+                }}
+                onClick={() => setAnchorElUser(null)}
+              >
+                Dashboard
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<LoginIcon />}
+                component={Link}
+                to="/login"
+                sx={{
+                  py: 1.5,
+                  px: 4,
+                  textTransform: 'none',
+                  fontSize: '1rem',
+                  '&:hover': {
+                    bgcolor: 'primary.dark'
+                  }
+                }}
+                onClick={() => setAnchorElUser(null)}
+              >
+                Login
+              </Button>
+            )}
+          </Box>
+       
+          </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

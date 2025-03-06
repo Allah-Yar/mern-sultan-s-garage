@@ -31,6 +31,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 const PORT = process.env.PORT || 3000;
 db();
 
+// 'https://sultans-garage.vercel.app',
 app.use(cors({
     origin: ['https://sultans-garage.vercel.app', 'http://localhost:5173'], // Array format for multiple origins
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific methods (optional)
@@ -48,74 +49,156 @@ app.use(compression());
 
 
 
-const adminSchema = new mongoose.Schema({
-  // username: { type: String, required: true },
-  // email: { type: String, required: true, unique: true },
-  // password: String,
-  // googleId: String,
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
-  // secret: String
-});
+// const adminSchema = new mongoose.Schema({
+//   // username: { type: String, required: true },
+//   // email: { type: String, required: true, unique: true },
+//   // password: String,
+//   // googleId: String,
+//   email: { type: String, required: true, unique: true },
+//   password: { type: String, required: true }
+//   // secret: String
+// });
 
 
 
-const Admin = new mongoose.model("Admin", adminSchema);
+// const Admin = new mongoose.model("Admin", adminSchema);
 
 
 // Signup route
-app.post('/api/signup', async (req, res) => {
-  const { email, password } = req.body;
+// app.post('/api/signup', async (req, res) => {
+//   const { email, password } = req.body;
+//   try {
+//     // Check if an admin already exists
+//     const existingAdmin = await Admin.findOne();
+//     if (existingAdmin) {
+//       return res.status(400).json({ error: 'Only one admin is allowed' });
+//     }
+
+//     // Hash the password and create the admin
+//     const hashedPassword = await bcrypt.hash(password, 10);
+//     const admin = new Admin({ email, password: hashedPassword });
+//     await admin.save();
+//     res.status(201).json({ message: 'Admin created successfully' });
+//   } catch (err) {
+//     res.status(500).json({ error: 'Error creating admin' });
+//   }
+// });
+
+
+
+// // Login route
+// app.post('/api/login', async (req, res) => {
+//   const { email, password } = req.body;
+//   try {
+//     const admin = await Admin.findOne({ email });
+//     if (!admin) return res.status(400).json({ error: 'Admin not found' });
+
+//     const isMatch = await bcrypt.compare(password, admin.password);
+//     if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
+
+//     const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+//     res.json({ token });
+//   } catch (err) {
+//     res.status(500).json({ error: 'Error logging in' });
+//   }
+// });
+
+// app.get('/api/check-admin', async (req, res) => {
+//   try {
+//     const admin = await Admin.findOne();
+//     if (admin) {
+//       return res.json({ adminExists: true });
+//     } else {
+//       return res.json({ adminExists: false });
+//     }
+//   } catch (err) {
+//     res.status(500).json({ error: 'Error checking admin status' });
+//   }
+// });
+
+// User Schema
+const userSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  isAdmin: { type: Boolean, default: false }
+});
+
+const User = mongoose.model('User', userSchema);
+
+// Register
+app.post('/api/register', async (req, res) => {
   try {
-    // Check if an admin already exists
-    const existingAdmin = await Admin.findOne();
-    if (existingAdmin) {
-      return res.status(400).json({ error: 'Only one admin is allowed' });
+    const { email, password } = req.body;
+    
+    // Check if user exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Hash the password and create the admin
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-    const admin = new Admin({ email, password: hashedPassword });
-    await admin.save();
-    res.status(201).json({ message: 'Admin created successfully' });
-  } catch (err) {
-    res.status(500).json({ error: 'Error creating admin' });
+    
+    // Create user (first user will be admin)
+    const userCount = await User.countDocuments();
+    const user = new User({
+      email,
+      password: hashedPassword,
+      isAdmin: userCount === 0 // First user is admin
+    });
+
+    await user.save();
+    
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
-
-
-// Login route
+// Login
 app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
   try {
-    const admin = await Admin.findOne({ email });
-    if (!admin) return res.status(400).json({ error: 'Admin not found' });
-
-    const isMatch = await bcrypt.compare(password, admin.password);
-    if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
-
-    const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
-  } catch (err) {
-    res.status(500).json({ error: 'Error logging in' });
-  }
-});
-
-app.get('/api/check-admin', async (req, res) => {
-  try {
-    const admin = await Admin.findOne();
-    if (admin) {
-      return res.json({ adminExists: true });
-    } else {
-      return res.json({ adminExists: false });
+    const { email, password } = req.body;
+    
+    // Find user
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
-  } catch (err) {
-    res.status(500).json({ error: 'Error checking admin status' });
+
+    // Check password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Create token
+    const token = jwt.sign(
+      { userId: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.json({ token, isAdmin: user.isAdmin });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
-
+// Protected dashboard route
+app.get('/api/dashboard', (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (!decoded.isAdmin) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+    res.json({ message: 'Welcome to Admin Dashboard' });
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid token' });
+  }
+});
 
 app.use((err, req, res, next) => {
   console.error(err); // Log the error

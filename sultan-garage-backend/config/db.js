@@ -8,11 +8,15 @@ dotenv.config();
 // const MONGO_URI = process.env.MONGODB_URI;
 const MONGO_URI = process.env.MONGODB_URI
 
-
+console.log('MongoDB URI:', MONGO_URI)
 
 export const db = async () => {
   try {
-    await mongoose.connect( MONGO_URI );
+    await mongoose.connect( MONGO_URI, {
+      serverSelectionTimeoutMS: 5000,
+    });
+    ;
+
     console.log('MongoDB Connected Successfully on port 27017');
     
     mongoose.connection.on('error', err => {

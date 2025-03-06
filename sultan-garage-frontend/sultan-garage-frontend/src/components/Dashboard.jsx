@@ -1,80 +1,147 @@
-import { useEffect } from 'react';
+
+import  { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { 
+import {
   Container,
-  Box,
+  Paper,
   Typography,
   Button,
+  Box,
   CssBaseline
 } from '@mui/material';
-// import { createTheme, ThemeProvider } from '@mui/material/styles';
+import LogoutIcon from '@mui/icons-material/Logout';
+import HomeIcon from '@mui/icons-material/Home';
 
-// const defaultTheme = createTheme();
-
-const Dashboard = () => {
+function Dashboard() {
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  // Check if user is authenticated
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-    }
+    const fetchDashboard = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:3000/api/dashboard', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setMessage(response.data.message);
+      } catch (err) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('isAdmin');
+        navigate('/login');
+        console.error(err);
+      }
+    };
+    fetchDashboard();
   }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/login');
+    localStorage.removeItem('isAdmin');
+    navigate('/');
+    window.location.reload();
+  };
+  const handleHome = () => {
+    navigate('/');
     window.location.reload();
   };
 
-  // const handleHome = () => {
-  //   navigate('/');
-  //   window.location.reload();
-  // };
-
   return (
-    // <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 3
+    <>
+      <CssBaseline /> {/* Normalizes CSS across browsers */}
+      <Container 
+        maxWidth="sm" 
+        sx={{ 
+          minHeight: '100vh', 
+          display: 'flex', 
+          alignItems: 'center',
+          py: 4 
+        }}
+      >
+        <Paper 
+          elevation={6} 
+          sx={{ 
+            p: { xs: 3, sm: 4 }, 
+            width: '100%',
+            borderRadius: 2
           }}
         >
-          <Typography variant="h5" component="h1">
+          <Typography 
+            variant="h4" 
+            component="h2" 
+            align="center" 
+            gutterBottom
+            sx={{ 
+              fontWeight: 'bold',
+              color: 'primary.main',
+              mb: 3
+            }}
+          >
             Admin Dashboard
           </Typography>
           
-          <Typography variant="body1">
-            Welcome to your admin panel!
+          <Typography 
+            variant="body1" 
+            align="center" 
+            sx={{ 
+              mb: 4,
+              color: 'text.secondary'
+            }}
+          >
+            {message}
           </Typography>
 
-          <Box sx={{ display: 'flex', gap: 2, mt: 4 }}>
-            {/* <Button
-              variant="contained"
-              color="primary"
-              onClick={handleHome}
-            >
-              Home
-            </Button> */}
-            
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              flexDirection: { xs: 'column', sm: 'row' }, 
+              gap: 2,
+              justifyContent: 'center'
+            }}
+          >
             <Button
-              variant="outlined"
+              variant="contained"
               color="error"
+              startIcon={<LogoutIcon />}
               onClick={handleLogout}
+              fullWidth
+              sx={{ 
+                py: 1.5,
+                textTransform: 'none',
+                fontSize: '1rem',
+                '&:hover': {
+                  bgcolor: 'error.dark'
+                }
+              }}
             >
               Logout
             </Button>
+            
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<HomeIcon />}
+              // component={Link}
+              onClick={handleHome}
+              
+              fullWidth
+              sx={{ 
+                py: 1.5,
+                textTransform: 'none',
+                fontSize: '1rem',
+                '&:hover': {
+                  bgcolor: 'primary.dark'
+                }
+              }}
+              
+            >
+              Home
+            </Button>
           </Box>
-        </Box>
+        </Paper>
       </Container>
-    // </ThemeProvider>
+    </>
   );
-};
+}
 
 export default Dashboard;
