@@ -17,7 +17,7 @@ export const db = async () => {
     });
     ;
 
-    console.log('MongoDB Connected Successfully on port 27017');
+    console.log(`$MongoDB Connected Successfully on ${MONGO_URI}`);
     
     mongoose.connection.on('error', err => {
       console.error('MongoDB connection error:', err);
