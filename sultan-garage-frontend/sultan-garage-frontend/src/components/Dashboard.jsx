@@ -20,8 +20,11 @@ function Dashboard() {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
+
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://sultan-garage-production.up.railway.app/api/dashboard', {
+        const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://sultan-garage-production.up.railway.app/api';
+        const DASHBOARD_URL = `${BASE_URL}/dashboard`;
+        const response = await axios.get(DASHBOARD_URL, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setMessage(response.data.message);
@@ -39,11 +42,11 @@ function Dashboard() {
     localStorage.removeItem('token');
     localStorage.removeItem('isAdmin');
     navigate('/');
-    window.location.reload();
+    // window.location.reload();
   };
   const handleHome = () => {
     navigate('/');
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (

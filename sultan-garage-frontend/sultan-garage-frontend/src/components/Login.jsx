@@ -286,13 +286,19 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://sultan-garage-production.up.railway.app/api/login', { email, password });
+      const BASE_URL =  window.location.hostname === 'localhost'
+      ? 'http://localhost:3000/api'
+      : 'https://sultan-garage-production.up.railway.app/api';
+
+      const LOGIN_URL = `${BASE_URL}/login`;
+
+      const response = await axios.post(LOGIN_URL , { email, password });
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('isAdmin', response.data.isAdmin);
       
       if (response.data.isAdmin) {
         navigate('/dashboard');
-        window.location.reload();
+        // window.location.reload();
       } else {
         setError('Only admins can access the dashboard');
       }

@@ -261,21 +261,27 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // CORS Configuration
-const allowedOrigins = ['https://sultans-garage.vercel.app', 'http://localhost:5173'];
+// const allowedOrigins = ['https://sultans-garage.vercel.app', 'http://localhost:5173'];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (!origin || allowedOrigins.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error('Not allowed by CORS'));
+//       }
+//     },
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     credentials: true,
+//   })
+// );
+app.use(cors({
+      origin: ['https://sultans-garage.vercel.app', 'http://localhost:5173'], // Array format for multiple origins
+      methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific methods (optional)
+      credentials: true,
+    }));
+
 
 // User Schema
 const userSchema = new mongoose.Schema({
@@ -314,39 +320,71 @@ app.post('/api/register', async (req, res) => {
 });
 
 // Login Route
-app.post('/api/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
+// app.post('/api/login', async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
 
-    // Find user
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+//     // Find user
+//     const user = await User.findOne({ email });
+//     if (!user) return res.status(400).json({ message: 'Invalid credentials' });
 
-    // Check password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+//     // Check password
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
-    // Create JWT Token
-    const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
-    });
+//     // Create JWT Token
+//     const token = jwt.sign({ userId: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, {
+//       expiresIn: '1h',
+//     });
 
-    // Store token in HttpOnly cookie
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Secure in production
-      sameSite: 'Strict',
-    }).json({ isAdmin: user.isAdmin });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+//     // Store token in HttpOnly cookie
+//     res.cookie('token', token, {
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === 'production', // Secure in production
+//       sameSite: 'Strict',
+//     }).json({ isAdmin: user.isAdmin });
+//   } catch (error) {
+//     console.error('Login error:', error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
 
 // Logout Route
 // app.post('/api/logout', (req, res) => {
 //   res.clearCookie('token').json({ message: 'Logged out successfully' });
 // });
+
+
+
+// Login
+app.post('/api/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    // Find user
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Check password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Create token
+    const token = jwt.sign(
+      { userId: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.json({ token, isAdmin: user.isAdmin });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 // Protected Dashboard Route
 app.get('/api/dashboard', (req, res) => {

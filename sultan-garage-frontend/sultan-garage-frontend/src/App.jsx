@@ -163,12 +163,12 @@ const MainContent = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
+          <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
           <Route path="/products" element={<ProductCard />} />
-          <Route path="contact" element={<AppointmentForm />} />
-          <Route path="testimonials" element={<Testimonials />} />
-          <Route path="create" element={<Product />} />
+          <Route path="/contact" element={<AppointmentForm />} />
+          <Route path="/testimonials" element={<Testimonials />} />
+          <Route path="/create" element={<Product />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Signup />} />
