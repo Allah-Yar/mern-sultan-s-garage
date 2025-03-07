@@ -384,18 +384,8 @@ function Login() {
                 }
               }}
             >
-              <MUILink 
-                component={Link} 
-                to="/dashboard" 
-                sx={{ 
-                  color: 'primary.main',
-                  textDecoration: 'none',
-                  '&:hover': { textDecoration: 'underline' }
-                }}
-              >
-                 Login
-              </MUILink>
-             
+              
+              Login
             </Button>
 
             <Typography 
