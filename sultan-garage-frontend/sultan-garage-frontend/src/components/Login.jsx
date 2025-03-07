@@ -302,7 +302,7 @@ function Login() {
       
       if (response.data.isAdmin) {
         navigate('/dashboard');
-        // window.location.reload();
+        window.location.reload();
       } else {
         setError('Only admins can access the dashboard');
       }

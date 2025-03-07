@@ -43,14 +43,16 @@ function Dashboard() {
   }, [navigate]);
 
   const handleLogout = () => {
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('isAdmin');
     localStorage.removeItem('token');
     localStorage.removeItem('isAdmin');
     navigate('/');
-    // window.location.reload();
+    window.location.reload();
   };
   const handleHome = () => {
     navigate('/');
-    // window.location.reload();
+    window.location.reload();
   };
 
   return (
