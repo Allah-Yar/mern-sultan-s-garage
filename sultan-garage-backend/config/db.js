@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // const MONGO_URI = process.env.MONGODB_URI;
-const MONGO_URI = process.env.MONGODB_URI
+const MONGO_URI = process.env.MONGODB_URI;
 
 console.log('MongoDB URI:', MONGO_URI)
 
