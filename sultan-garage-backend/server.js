@@ -338,6 +338,7 @@ app.post('/api/login', async (req, res) => {
       sameSite: 'Strict',
     }).json({ isAdmin: user.isAdmin });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
 });
