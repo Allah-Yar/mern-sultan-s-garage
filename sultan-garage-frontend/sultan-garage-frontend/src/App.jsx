@@ -127,7 +127,7 @@
 
 // export default App;
 
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Layout from './components/Layout';
 import Home from './pages/HomePage';
