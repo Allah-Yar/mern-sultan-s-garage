@@ -31,11 +31,11 @@ function Dashboard() {
         });
         setMessage(response.data.message);
       } catch (err) {
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('isAdmin');
+        sessionStorage.removeItem('token')
+        sessionStorage.removeItem('isAdmin') ||
         localStorage.removeItem('token');
         localStorage.removeItem('isAdmin');
-        navigate('/');
+        navigate('/login');
         console.error(err);
       }
     };
