@@ -21,7 +21,7 @@ function Dashboard() {
     const fetchDashboard = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3000/api/dashboard', {
+        const response = await axios.get('https://sultan-garage-production.up.railway.app/api/dashboard', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setMessage(response.data.message);
