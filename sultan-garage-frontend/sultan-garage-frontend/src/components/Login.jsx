@@ -295,6 +295,8 @@ function Login() {
       const response = await axios.post(LOGIN_URL , { email, password },
         {headers: { 'Content-Type': 'application/json' }}
       );
+      sessionStorage.setItem('token', response.data.token);
+      sessionStorage.setItem('isAdmin', response.data.isAdmin);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('isAdmin', response.data.isAdmin);
       

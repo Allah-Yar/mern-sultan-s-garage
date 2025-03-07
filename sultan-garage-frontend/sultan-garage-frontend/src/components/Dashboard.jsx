@@ -20,8 +20,8 @@ function Dashboard() {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+        
         const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://sultan-garage-production.up.railway.app/api';
         const DASHBOARD_URL = `${BASE_URL}/dashboard`;
         const response = await axios.get(DASHBOARD_URL, {
@@ -31,6 +31,8 @@ function Dashboard() {
         });
         setMessage(response.data.message);
       } catch (err) {
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('isAdmin');
         localStorage.removeItem('token');
         localStorage.removeItem('isAdmin');
         navigate('/login');
