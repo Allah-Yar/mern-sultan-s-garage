@@ -292,7 +292,9 @@ function Login() {
 
       const LOGIN_URL = `${BASE_URL}/login`;
 
-      const response = await axios.post(LOGIN_URL , { email, password });
+      const response = await axios.post(LOGIN_URL , { email, password },
+        {headers: { 'Content-Type': 'application/json' }}
+      );
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('isAdmin', response.data.isAdmin);
       

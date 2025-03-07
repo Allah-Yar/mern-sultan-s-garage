@@ -203,7 +203,13 @@ function Signup() {
     try {
       const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://sultan-garage-production.up.railway.app/api';
       const SIGNUP_URL = `${BASE_URL}/register`;
-      await axios.post(SIGNUP_URL, { email, password });
+      await axios.post(SIGNUP_URL, { email, password },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       navigate('/login');
     } catch (err) {
       setError(err.response?.data.message || 'Registration failed');
