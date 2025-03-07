@@ -44,7 +44,7 @@ function ResponsiveAppBar() {
   // const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token') || localStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
     }

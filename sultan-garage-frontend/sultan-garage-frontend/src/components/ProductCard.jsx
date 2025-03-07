@@ -30,22 +30,29 @@ const ProductCard = () => {
   const [loadingImages, setLoadingImages] = useState({});
   const [editingProduct, setEditingProduct] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [authStatus, setAuthStatus] = useState({
-    isRegistered: false,
-    isLoggedIn: false
-  });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [authStatus, setAuthStatus] = useState({
+  //   isRegistered: false,
+  //   isLoggedIn: false
+  // });
 
-   // Check if user is already logged in on component mount
-   useEffect(() => {
-    const checkLoginStatus = () => {
-      // Check localStorage or sessionStorage for auth status
-      const registered = localStorage.getItem('isRegistered') === 'true';
-      const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-      setAuthStatus({ isRegistered: registered, isLoggedIn: loggedIn });
-    };
+    useEffect(() => {
+      const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+      if (token) {
+        setIsLoggedIn(true);
+      }
+    }, []);
+  //  // Check if user is already logged in on component mount
+  //  useEffect(() => {
+  //   const checkLoginStatus = () => {
+  //     // Check localStorage or sessionStorage for auth status
+  //     const registered = localStorage.getItem('isRegistered') === 'true';
+  //     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  //     setAuthStatus({ isRegistered: registered, isLoggedIn: loggedIn });
+  //   };
 
-    checkLoginStatus();
-  }, []);
+  //   checkLoginStatus();
+  // }, []);
 
 
   // This is used for products
@@ -61,7 +68,7 @@ const ProductCard = () => {
     }
 
     if (product.image.startsWith('/uploads')) {
-      const baseURL =  'https://sultan-garage-production.up.railway.app';
+      const baseURL =  'https://sultan-garage.up.railway.app';
       return `${baseURL}${product.image}`;
     }
 
@@ -236,7 +243,7 @@ const ProductCard = () => {
                     mt: 2 
                   }}
                 >
-                {authStatus.isLoggedIn ? (
+                {isLoggedIn ? (
                     
                   <>
                 <Button
@@ -279,7 +286,7 @@ const ProductCard = () => {
           sx={{ textAlign: 'center', mt: 4, color: '#555' }}
         >
           No Products Found 
-          {authStatus.isLoggedIn ? 
+          {isLoggedIn ? 
           <Button
           onClick={() => handleNavClick('/create')}
             variant='h5'  
