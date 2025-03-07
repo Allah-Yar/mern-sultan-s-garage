@@ -288,7 +288,7 @@ function Login() {
     try {
       const BASE_URL =  window.location.hostname === 'localhost'
       ? 'http://localhost:3000/api'
-      : 'https://sultan-garage-production.up.railway.app/api';
+      : 'https://sultan-garage.up.railway.app/api';
 
       const LOGIN_URL = `${BASE_URL}/login`;
 

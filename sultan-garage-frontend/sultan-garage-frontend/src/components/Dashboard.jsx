@@ -22,7 +22,7 @@ function Dashboard() {
       try {
         const token = sessionStorage.getItem('token') || localStorage.getItem('token');
         
-        const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://sultan-garage-production.up.railway.app/api';
+        const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://sultan-garage.up.railway.app/api';
         const DASHBOARD_URL = `${BASE_URL}/dashboard`;
         const response = await axios.get(DASHBOARD_URL, {
           headers: { Authorization: `Bearer ${token}`,

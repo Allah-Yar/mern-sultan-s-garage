@@ -201,7 +201,7 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://sultan-garage-production.up.railway.app/api';
+      const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : 'https://sultan-garage.up.railway.app/api';
       const SIGNUP_URL = `${BASE_URL}/register`;
       await axios.post(SIGNUP_URL, { email, password },
         {
