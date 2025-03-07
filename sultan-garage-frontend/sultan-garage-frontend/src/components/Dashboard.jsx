@@ -35,7 +35,7 @@ function Dashboard() {
         sessionStorage.removeItem('isAdmin');
         localStorage.removeItem('token');
         localStorage.removeItem('isAdmin');
-        navigate('/login');
+        navigate('/');
         console.error(err);
       }
     };
