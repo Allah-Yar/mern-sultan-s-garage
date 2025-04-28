@@ -67,11 +67,12 @@ const HeroSection = () => {
     >
         </Box>
         
-      <Container>
+      <Container sx={{ padding: 4, textAlign: 'center' }}>
         <Typography
           variant="h2"
           sx={{
             fontWeight: 700,
+
             color: 'whitesmoke',
             fontSize: '3rem',
             '@media (max-width:600px)': {

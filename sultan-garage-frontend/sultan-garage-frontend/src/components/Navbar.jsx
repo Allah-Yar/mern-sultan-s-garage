@@ -1,4 +1,4 @@
-  
+
 
 import {  useState, useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -50,12 +50,18 @@ function ResponsiveAppBar() {
     }
   }, []);
 
+  // const handleNavClick = (path) => {
+  //   navigate(path);
+  //   window.scrollTo({ top: 0, behavior: 'smooth' });
+  //   setAnchorElNav(null);
+  //   window.location.reload();
+  // };
   const handleNavClick = (path) => {
-    navigate(path);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setAnchorElNav(null);
-    window.location.reload();
+    setAnchorElNav(null); // close mobile menu
+    navigate(path, { replace: false }); // navigate normally
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // scroll smoothly
   };
+  
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -71,15 +77,6 @@ function ResponsiveAppBar() {
   return (
     <AppBar position="sticky">
       <Container maxWidth="xl">
-      <Typography sx={{
-  mr: 2,
-  color: 'red',  // Red color for text
-  fontSize: '2rem',  // Increase font size (adjust as needed)
-  textAlign: 'center',  // Center the text
-  fontWeight: 'bold',  // Make the text bold (optional)
-}}>
-  Warning! Dev in Progress.
-</Typography>
         <Toolbar disableGutters>
           {/* Logo and Brand Name */}
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

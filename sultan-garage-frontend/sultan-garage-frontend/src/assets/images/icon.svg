@@ -1,0 +1,40 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Circular background -->
+  <circle cx="100" cy="100" r="95" fill="#1a237e" />
+  <circle cx="100" cy="100" r="85" fill="#ffffff" />
+  
+  <!-- Inner circular badge -->
+  <circle cx="100" cy="100" r="75" fill="#1a237e" />
+  
+  <!-- Stylized "S" with wrench shape integrated -->
+  <path d="M100,40 
+           C75,40 65,55 65,70 
+           C65,85 80,90 100,95 
+           C120,100 135,105 135,120 
+           C135,140 115,160 80,160 
+           M110,50 
+           C120,57 125,65 125,75
+           M90,150
+           C80,143 75,135 75,125" 
+        stroke="#ffd700" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  
+  <!-- Gear element -->
+  <path d="M100,70 L105,65 L110,70 L115,65 L110,60 L115,55 L120,60 L125,55 L120,50 L115,45 L120,40 L100,40 L80,40 L85,45 L80,50 L75,55 L80,60 L85,55 L90,60 L95,55 L90,50 L95,45 L100,50 L105,45 L100,40" fill="#ffd700" />
+  
+  <!-- Small stars representing luxury -->
+  <polygon points="58,100 60,95 62,100 67,101 62,105 63,110 58,107 53,110 54,105 49,101 54,100" fill="#ffd700" />
+  <polygon points="142,100 144,95 146,100 151,101 146,105 147,110 142,107 137,110 138,105 133,101 138,100" fill="#ffd700" />
+  
+  <!-- Luxury car silhouette -->
+  <path d="M70,130 C70,130 75,127 85,127 L115,127 C125,127 130,130 130,130 L133,137 C133,137 128,140 115,140 L85,140 C72,140 67,137 67,137 L70,130 Z" fill="#ffd700" />
+  <circle cx="80" cy="137" r="4" fill="#1a237e" />
+  <circle cx="80" cy="137" r="1.5" fill="#ffffff" />
+  <circle cx="120" cy="137" r="4" fill="#1a237e" />
+  <circle cx="120" cy="137" r="1.5" fill="#ffffff" />
+  
+  <!-- Screw element -->
+  <circle cx="100" cy="110" r="8" fill="#ffd700" />
+  <circle cx="100" cy="110" r="6" fill="#1a237e" />
+  <path d="M96,106 L104,114 M104,106 L96,114" stroke="#ffd700" stroke-width="1.5" />
+  <circle cx="100" cy="110" r="2" fill="#ffd700" />
+</svg>

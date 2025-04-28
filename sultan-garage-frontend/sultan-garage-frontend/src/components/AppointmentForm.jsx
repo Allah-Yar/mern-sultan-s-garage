@@ -41,7 +41,7 @@ const AppointmentForm = () => {
     `;
     
     // WhatsApp phone number 
-    const phoneNumber = '+971509954306'; 
+    const phoneNumber = '+971568415565'; 
   
     // WhatsApp link for mobile
     const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message.trim())}`;
@@ -99,7 +99,7 @@ const AppointmentForm = () => {
     // Create a formatted message with the form data
     const message = 'Hello, I would like to book an appointment.';
     // WhatsApp phone number 
-    const phoneNumber = '+971509954306'; 
+    const phoneNumber = '+971568415565'; 
     // WhatsApp link for mobile
     const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     // WhatsApp link for desktop WhatsApp app

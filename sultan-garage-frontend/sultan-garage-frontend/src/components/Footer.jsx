@@ -2,6 +2,9 @@
 import { Box, Typography, Grid, Link, IconButton } from '@mui/material';
 import { Facebook, Twitter, Instagram, LinkedIn } from '@mui/icons-material'; // MUI icons for social media
 
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
+
 const Footer = () => {
   return (
     <Box sx={{ backgroundColor: '#1a1a2e', color: 'white', py: 4, px: 2 }}>
@@ -11,8 +14,23 @@ const Footer = () => {
           <Typography variant="h4" gutterBottom>Contact Information</Typography>
           <Typography variant="body2">123 Garage Street</Typography>
           <Typography variant="body2">Dubai, UAE</Typography>
-          <Typography variant="body2">Email: contact@garage.com</Typography>
-          <Typography variant="body2">Phone: +971 123 456 789</Typography>
+       
+
+{/* <Stack spacing={1}> */}
+  <Typography variant="body2" display="flex" alignItems="center" gap={1}>
+    <EmailIcon fontSize="small" />
+    <Link href="mailto:saeedsultan313@gmail.com" underline="hover" color="inherit">
+      email    </Link>
+  </Typography>
+
+  <Typography variant="body2" display="flex" alignItems="center" gap={1}>
+    <PhoneIcon fontSize="small" />
+    <Link href="tel:+971568415565" underline="hover" color="inherit">
+      Phone
+    </Link>
+  </Typography>
+{/* </Stack> */}
+
         </Grid>
 
         {/* Quick Links */}
