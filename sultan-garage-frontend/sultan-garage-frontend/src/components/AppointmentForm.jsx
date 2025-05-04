@@ -140,7 +140,7 @@ const AppointmentForm = () => {
 
   return (
     <>
-    <Box
+    {/* <Box
       sx={{
         maxWidth: {xs: '100%', sm: '80%', md: '60%'},
         px: {xs: 2, sm: 3},
@@ -151,7 +151,9 @@ const AppointmentForm = () => {
         p: 3,
         boxShadow: 3,
         borderRadius: 2,
-        backgroundColor: 'white',
+        borderColor: 'white',
+        borderWidth: 1,
+        backgroundColor: '#0000',
         width: '100%',
          // Add responsiveness using breakpoints
     '@media (max-width:768px)': {
@@ -160,11 +162,102 @@ const AppointmentForm = () => {
         
       },
       }}
-    >
+    > */}
+    <Box
+  sx={{
+    maxWidth: { xs: '100%', sm: '80%', md: '60%' },
+    px: { xs: 2, sm: 3 },
+    mx: 'auto',
+    mt: 4,
+    mb: 4,
+    p: 3,
+    boxShadow: 3,
+    borderRadius: 2,
+    borderColor: 'white',
+    borderWidth: 1,
+    backgroundColor: '#0000',
+    width: '100%',
+    // Add responsiveness using breakpoints
+    '@media (max-width:768px)': {
+      padding: 3, // Reduce padding on smaller screens
+      maxWidth: '80%', // Make it full width on small screens
+    },
+    // Electric border effect
+    '@keyframes electricEffect': {
+      '0%': {
+        borderColor: '#fff',
+        boxShadow: '0 0 10px 3px rgba(255, 255, 255, 0.8)',
+      },
+      '25%': {
+        borderColor: '#00f',
+        boxShadow: '0 0 10px 3px rgba(0, 0, 255, 0.8)',
+      },
+      '50%': {
+        borderColor: '#0f0',
+        boxShadow: '0 0 10px 3px rgba(0, 255, 0, 0.8)',
+      },
+      '75%': {
+        borderColor: '#f00',
+        boxShadow: '0 0 10px 3px rgba(255, 0, 0, 0.8)',
+      },
+      '100%': {
+        borderColor: '#fff',
+        boxShadow: '0 0 10px 3px rgba(255, 255, 255, 0.8)',
+      },
+    },
+    animation: 'electricEffect 1s infinite',
+  }} 
+>
+{/* <Box
+  sx={{
+    maxWidth: { xs: '100%', sm: '80%', md: '60%' },
+    px: { xs: 2, sm: 3 },
+    mx: 'auto',
+    mt: 4,
+    mb: 4,
+    p: 3,
+    boxShadow: 3,
+    borderRadius: 2,
+    borderWidth: 2, // Set a slightly thicker border
+    backgroundColor: '#0000',
+    width: '100%',
+    position: 'relative',
+    overflow: 'hidden', // To ensure the electricity stays within bounds of the border
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 1,
+      borderRadius: 'inherit',
+      border: '2px solid transparent', // Use a transparent border to make space for the effect
+      background: 'linear-gradient(90deg, transparent, white, transparent)',
+      backgroundSize: '200% 100%',
+      animation: 'electricity 1.5s linear infinite',
+    },
+    // Add responsiveness using breakpoints
+    '@media (max-width:768px)': {
+      padding: 3, // Reduce padding on smaller screens
+      maxWidth: '80%', // Make it full width on small screens
+    },
+    // Keyframes for electricity animation
+    '@keyframes electricity': {
+      '0%': {
+        backgroundPosition: '-200% 0',
+      },
+      '100%': {
+        backgroundPosition: '200% 0',
+      },
+    },
+  }}
+> */}
+
       <Typography
         variant="h5"
         component="h2"
-        sx={{ mb: 3, textAlign: 'center', fontWeight: 'bold', color: '#1a1a2e' }}
+        sx={{ mb: 3, textAlign: 'center', fontWeight: 'bold', color: 'white' }}
       >
         Book an Appointment via WhatsApp
       </Typography>
@@ -278,7 +371,7 @@ const AppointmentForm = () => {
       <Typography
         variant="h5"
         component="h2"
-        sx={{ mb: 3, mt: 3, textAlign: 'center', fontWeight: 'bold', color: '#1a1a2e' }}
+        sx={{ mb: 3, mt: 3, textAlign: 'center', fontWeight: 'bold', color: 'white' }}
       > OR
       <br />
         Direct Contact via WhatsApp

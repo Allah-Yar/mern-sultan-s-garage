@@ -3,6 +3,7 @@ import { Box, Typography, Grid, Rating } from '@mui/material';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
 import hero from '../assets/images/hero.jpg';
+// import { BorderColor } from '@mui/icons-material';
 
 // Sample testimonial data with star ratings
 const testimonials = [
@@ -35,9 +36,9 @@ const Testimonials = () => {
         What Our Customers Say
       </Typography>
       
-      <Carousel showThumbs={false} autoPlay interval={5000} infiniteLoop>
+      <Carousel showThumbs={false} autoPlay interval={5000} infiniteLoop sx={{ borderRadius: 2, BorderColor: 'white', }}>
         {testimonials.map((testimonial, index) => (
-          <Box key={index} sx={{ p: 6, mx: 4, backgroundColor: '#f5f5f5', borderRadius: 2, boxShadow: 3 }}>
+          <Box key={index} sx={{ p: 6, mx: 4,  backgroundColor: 'white', color: 'black', borderRadius: 2, boxShadow: 3,   }}>
             <Typography variant="body1" sx={{ fontStyle: 'italic', mb: 2 }}>
               {testimonial.text}
             </Typography>
@@ -81,3 +82,7 @@ const Testimonials = () => {
 };
 
 export default Testimonials;
+
+
+
+

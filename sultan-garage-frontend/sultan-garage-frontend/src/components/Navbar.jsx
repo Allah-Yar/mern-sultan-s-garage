@@ -75,12 +75,15 @@ function ResponsiveAppBar() {
   
 
   return (
-    <AppBar position="sticky">
+    // <AppBar position="sticky">
+    // <AppBar position="sticky" sx={{ background: 'linear-gradient(to right, #0f2027, #203a43, #2c5364)' }}>
+<AppBar position="sticky" sx={{ background: 'linear-gradient(to right, #1e1e2f, #23233b, #2c2c4c)' }}>
+
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Logo and Brand Name */}
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
+          {/* <Typography
             variant="h6"
             noWrap
             onClick={() => handleNavClick('/')}
@@ -96,7 +99,23 @@ function ResponsiveAppBar() {
             }}
           >
             Sultan&apos;s Garage
-          </Typography>
+          </Typography> */}
+          <Typography
+  variant="h6"
+  onClick={() => handleNavClick('/')}
+  sx={{
+    mr: 7,
+    display: { xs: 'none', md: 'flex' },
+    fontFamily: 'Pacifico, cursive',
+    fontSize: '1.8rem',
+    color: '#ffca28',
+    cursor: 'pointer',
+    textShadow: '1px 1px 4px rgba(0,0,0,0.4)'
+  }}
+>
+  Sultan&apos;s Garage
+</Typography>
+
 
           {/* Mobile Menu */}
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -112,7 +131,7 @@ function ResponsiveAppBar() {
               anchorEl={anchorElNav}
               open={Boolean(anchorElNav)}
               onClose={() => setAnchorElNav(null)}
-              sx={{ display: { xs: 'block', md: 'none' } }}
+              sx={{  display: { xs: 'block', md: 'none' } }}
             >
               {/* <MenuItem onClick={() => handleNavClick('/')}>
                 <Typography>Home</Typography>
@@ -164,10 +183,13 @@ function ResponsiveAppBar() {
               mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              
               fontWeight: 700,
+              fontFamily: 'Pacifico, cursive',
+    fontSize: '1.8rem',
+    color: '#ffca28',
               letterSpacing: '.3rem',
-              color: 'inherit',
+             
               textDecoration: 'none',
               cursor: 'pointer',
             }}
