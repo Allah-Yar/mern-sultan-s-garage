@@ -7,7 +7,9 @@ import PhoneIcon from '@mui/icons-material/Phone';
 
 const Footer = () => {
   return (
-    <Box sx={{ backgroundColor: '#1a1a2e', color: 'white', py: 4, px: 2 }}>
+    
+    <Box sx={{ default: '#0A0A23', color: 'white', py: 4, px: 2 }}>
+      <hr style={{ borderColor: '#444', margin: '3rem auto', width: '60%' }} />
       <Grid container spacing={4} sx={{ justifyContent: 'space-between' }}>
         {/* Contact Information */}
         <Grid item xs={12} sm={6} md={3}>
